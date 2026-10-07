@@ -1,30 +1,30 @@
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const sql = require("mssql");
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 
-const config = {
-    server: process.env.DB_SERVER,
-    database: process.env.DB_DATABASE,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    options: {
-        encrypt: false,
-        trustServerCertificate: true
-    }
-};
+  ssl: {
+    rejectUnauthorized: false,
+  },
 
-const poolPromise = new sql.ConnectionPool(config)
-    .connect()
-    .then(pool => {
-        console.log("✅ Conectado a SQL Server");
-        return pool;
-    })
-    .catch(error => {
-        console.error("❌ Error de conexión a SQL Server:", error);
-        throw error;
-    });
+  // Adecuado para el Transaction Pooler
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+});
+
+pool.on("error", (error) => {
+  console.error(
+    "❌ Error inesperado en PostgreSQL:",
+    error
+  );
+});
 
 module.exports = {
-    sql,
-    poolPromise
+  pool,
 };

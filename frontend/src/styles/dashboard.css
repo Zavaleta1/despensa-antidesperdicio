@@ -1,0 +1,1322 @@
+/* =========================================================
+   DASHBOARD
+   Despensa Antidesperdicio
+========================================================= */
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.dashboard-heading {
+  position: relative;
+
+  margin-bottom: 24px;
+  padding: 28px 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(201, 221, 207, 0.85);
+
+  border-radius: 20px;
+
+  background:
+    radial-gradient(
+      circle at 82% 15%,
+      rgba(108, 181, 128, 0.16),
+      transparent 27%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f4faf5 55%,
+      #edf7ef 100%
+    );
+
+  box-shadow:
+    0 10px 35px
+      rgba(38, 77, 49, 0.055);
+}
+
+
+/* Decoración ambiental */
+
+.dashboard-heading::before {
+  content: "";
+
+  position: absolute;
+
+  top: -65px;
+  right: 90px;
+
+  width: 180px;
+  height: 180px;
+
+  border:
+    35px solid
+      rgba(76, 151, 96, 0.035);
+
+  border-radius: 50%;
+}
+
+.dashboard-heading::after {
+  content: "";
+
+  position: absolute;
+
+  right: -35px;
+  bottom: -65px;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(66, 145, 88, 0.035);
+}
+
+.dashboard-heading > div,
+.dashboard-heading > button {
+  position: relative;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   TEXTOS GENERALES
+========================================================= */
+
+.dashboard-eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #398255;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.dashboard-heading h1 {
+  margin: 0 0 8px;
+
+  color: #183326;
+
+  font-size: 32px;
+  font-weight: 760;
+
+  letter-spacing: -0.8px;
+}
+
+.dashboard-heading p {
+  max-width: 650px;
+
+  margin: 0;
+
+  color: #74857b;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+========================================================= */
+
+.dashboard-primary-button {
+  min-width: 155px;
+
+  padding: 13px 18px;
+
+  border: none;
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #28784b,
+      #35925b
+    );
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 20px
+      rgba(40, 120, 75, 0.2);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.dashboard-primary-button:hover {
+  filter: brightness(1.03);
+
+  box-shadow:
+    0 11px 25px
+      rgba(40, 120, 75, 0.25);
+
+  transform: translateY(-2px);
+}
+
+.dashboard-primary-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESUMEN DE LA DESPENSA
+========================================================= */
+
+.dashboard-summary-grid {
+  margin-bottom: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+.dashboard-summary-card {
+  position: relative;
+
+  min-height: 128px;
+
+  padding: 19px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(222, 231, 224, 0.95);
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 7px 22px
+      rgba(34, 67, 43, 0.045);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.dashboard-summary-card:hover {
+  border-color: #cfddd2;
+
+  box-shadow:
+    0 12px 30px
+      rgba(34, 67, 43, 0.075);
+
+  transform: translateY(-3px);
+}
+
+.dashboard-summary-card::after {
+  content: "";
+
+  position: absolute;
+
+  right: -28px;
+  bottom: -38px;
+
+  width: 95px;
+  height: 95px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(69, 143, 89, 0.035);
+}
+
+
+/* =========================================================
+   ICONOS DE RESUMEN
+========================================================= */
+
+.summary-icon {
+  position: relative;
+
+  z-index: 1;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid #dceade;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f1f8f3,
+      #e8f4eb
+    );
+
+  font-size: 22px;
+
+  box-shadow:
+    inset 0 1px 0 #ffffff;
+}
+
+.dashboard-summary-card > div:last-child {
+  position: relative;
+
+  z-index: 1;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-summary-card span {
+  color: #718178;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.dashboard-summary-card strong {
+  margin: 1px 0;
+
+  color: #21392c;
+
+  font-size: 27px;
+  font-weight: 780;
+
+  letter-spacing: -0.7px;
+}
+
+.dashboard-summary-card small {
+  color: #9aa69f;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   TARJETA DE ALERTA
+========================================================= */
+
+.summary-alert {
+  border-color: #efd4d1;
+
+  background:
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(214, 78, 66, 0.08),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #fff8f7
+    );
+}
+
+.summary-alert .summary-icon {
+  border-color: #f1d7d4;
+
+  background: #fff1ef;
+}
+
+.summary-alert strong {
+  color: #c8483e;
+}
+
+
+/* =========================================================
+   TARJETA TODO BIEN
+========================================================= */
+
+.summary-ok {
+  border-color: #cee5d3;
+
+  background:
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(65, 148, 89, 0.08),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #f4fbf6
+    );
+}
+
+.summary-ok strong {
+  color: #2d8150;
+}
+
+
+/* =========================================================
+   SECCIONES PRINCIPALES
+========================================================= */
+
+.dashboard-section {
+  position: relative;
+
+  margin-bottom: 22px;
+  padding: 26px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(222, 231, 224, 0.95);
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 28px
+      rgba(34, 67, 43, 0.045);
+}
+
+.dashboard-section-heading {
+  position: relative;
+
+  z-index: 1;
+
+  margin-bottom: 22px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+}
+
+.dashboard-section-heading h2 {
+  margin: 0 0 5px;
+
+  color: #21362a;
+
+  font-size: 19px;
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+.dashboard-section-heading p {
+  margin: 0;
+
+  color: #89968e;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   BOTÓN ENLACE
+========================================================= */
+
+.dashboard-link-button {
+  padding: 8px 11px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #327b4d;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dashboard-link-button:hover {
+  background: #f0f7f2;
+
+  transform: translateX(2px);
+}
+
+
+/* =========================================================
+   SEMÁFORO
+========================================================= */
+
+.traffic-light-grid {
+  position: relative;
+
+  z-index: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 13px;
+}
+
+.traffic-card {
+  position: relative;
+
+  min-height: 122px;
+
+  padding: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  overflow: hidden;
+
+  border:
+    1px solid #e7ece8;
+
+  border-radius: 14px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.traffic-card:hover {
+  box-shadow:
+    0 8px 22px
+      rgba(38, 67, 45, 0.07);
+
+  transform: translateY(-2px);
+}
+
+.traffic-card::after {
+  content: "";
+
+  position: absolute;
+
+  top: -28px;
+  right: -28px;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  opacity: 0.55;
+}
+
+.traffic-circle {
+  position: relative;
+
+  z-index: 1;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  box-shadow:
+    0 4px 12px
+      rgba(0, 0, 0, 0.045);
+
+  font-size: 22px;
+}
+
+.traffic-card > div {
+  position: relative;
+
+  z-index: 1;
+
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.traffic-card strong {
+  color: #263a2e;
+
+  font-size: 25px;
+  font-weight: 780;
+
+  line-height: 1;
+}
+
+.traffic-card
+span:not(.traffic-circle) {
+  margin-top: 5px;
+
+  color: #46564c;
+
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.traffic-card small {
+  margin-top: 4px;
+
+  color: #87938c;
+
+  font-size: 8.5px;
+
+  line-height: 1.4;
+}
+
+
+/* ROJO */
+
+.traffic-red {
+  border-color: #f0d0cd;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffafa,
+      #fff3f2
+    );
+}
+
+.traffic-red::after {
+  background: #f2bcb7;
+}
+
+
+/* NARANJA */
+
+.traffic-orange {
+  border-color: #f1dcc0;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdfa,
+      #fff7ed
+    );
+}
+
+.traffic-orange::after {
+  background: #f5d3a5;
+}
+
+
+/* AMARILLO */
+
+.traffic-yellow {
+  border-color: #ebe4b8;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffefa,
+      #fffbea
+    );
+}
+
+.traffic-yellow::after {
+  background: #eee095;
+}
+
+
+/* VERDE */
+
+.traffic-green {
+  border-color: #cfe4d4;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fbfefc,
+      #f0f8f2
+    );
+}
+
+.traffic-green::after {
+  background: #b7dbbf;
+}
+
+
+/* =========================================================
+   PRODUCTOS PRIORITARIOS
+========================================================= */
+
+.priority-products {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.priority-product {
+  position: relative;
+
+  min-height: 72px;
+
+  padding: 12px 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    42px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 12px;
+
+  overflow: hidden;
+
+  border:
+    1px solid #e7ece8;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #fbfcfb
+    );
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.priority-product:hover {
+  border-color: #d4dfd7;
+
+  box-shadow:
+    0 6px 18px
+      rgba(37, 69, 46, 0.055);
+
+  transform: translateX(3px);
+}
+
+.priority-status {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #f7f9f7;
+
+  font-size: 17px;
+}
+
+.priority-product-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.priority-product-info strong {
+  overflow: hidden;
+
+  color: #304239;
+
+  font-size: 12px;
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.priority-product-info span {
+  color: #89968e;
+
+  font-size: 9px;
+}
+
+.priority-expiration {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+
+  gap: 3px;
+
+  text-align: right;
+}
+
+.priority-expiration strong {
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.priority-expiration span {
+  color: #89968e;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   COLORES PRIORIDAD
+========================================================= */
+
+.priority-caducado {
+  border-left:
+    4px solid #c7443b;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff8f7 0%,
+      #ffffff 16%
+    );
+}
+
+.priority-caducado
+.priority-status {
+  background: #fff0ef;
+}
+
+.priority-caducado
+.priority-expiration strong {
+  color: #b9362e;
+}
+
+
+.priority-critico {
+  border-left:
+    4px solid #e25b50;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff9f8 0%,
+      #ffffff 16%
+    );
+}
+
+.priority-critico
+.priority-status {
+  background: #fff1f0;
+}
+
+.priority-critico
+.priority-expiration strong {
+  color: #cc473e;
+}
+
+
+.priority-proximo {
+  border-left:
+    4px solid #e99736;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fffaf4 0%,
+      #ffffff 16%
+    );
+}
+
+.priority-proximo
+.priority-status {
+  background: #fff5e9;
+}
+
+.priority-proximo
+.priority-expiration strong {
+  color: #ce7715;
+}
+
+
+.priority-atencion {
+  border-left:
+    4px solid #d6b630;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fffdf4 0%,
+      #ffffff 16%
+    );
+}
+
+.priority-atencion
+.priority-status {
+  background: #fff9dc;
+}
+
+.priority-atencion
+.priority-expiration strong {
+  color: #947b0c;
+}
+
+
+/* =========================================================
+   TODO BAJO CONTROL
+========================================================= */
+
+.dashboard-good-state {
+  min-height: 125px;
+
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  border:
+    1px solid #cce3d1;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7fcf8,
+      #eff8f1
+    );
+}
+
+.dashboard-good-state > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #dff1e3;
+  color: #2f8050;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.dashboard-good-state h3 {
+  margin: 0 0 4px;
+
+  color: #2b774a;
+
+  font-size: 13px;
+}
+
+.dashboard-good-state p {
+  margin: 0;
+
+  color: #75847b;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   BANNER ANTIDESPERDICIO
+========================================================= */
+
+.antiwaste-banner {
+  position: relative;
+
+  padding: 27px 29px;
+
+  display: grid;
+
+  grid-template-columns:
+    58px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 19px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(77, 142, 94, 0.24);
+
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(147, 211, 160, 0.14),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #174b35 0%,
+      #1d5d40 55%,
+      #276d48 100%
+    );
+
+  box-shadow:
+    0 10px 30px
+      rgba(29, 83, 52, 0.13);
+}
+
+.antiwaste-banner::before {
+  content: "";
+
+  position: absolute;
+
+  right: -60px;
+  bottom: -100px;
+
+  width: 260px;
+  height: 260px;
+
+  border:
+    45px solid
+      rgba(255, 255, 255, 0.025);
+
+  border-radius: 50%;
+}
+
+.antiwaste-icon {
+  position: relative;
+
+  z-index: 1;
+
+  width: 56px;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+      rgba(255, 255, 255, 0.13);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.1);
+
+  font-size: 27px;
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.09);
+}
+
+.antiwaste-content {
+  position: relative;
+
+  z-index: 1;
+}
+
+.antiwaste-content
+.dashboard-eyebrow {
+  color: #a6ddb4;
+}
+
+.antiwaste-content h2 {
+  margin: 0 0 6px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 720;
+
+  letter-spacing: -0.3px;
+}
+
+.antiwaste-content p {
+  max-width: 680px;
+
+  margin: 0;
+
+  color:
+    rgba(230, 244, 234, 0.67);
+
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.antiwaste-banner button {
+  position: relative;
+
+  z-index: 1;
+
+  padding: 12px 16px;
+
+  border:
+    1px solid
+      rgba(255, 255, 255, 0.15);
+
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #1d6241;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 750;
+
+  box-shadow:
+    0 5px 15px
+      rgba(0, 0, 0, 0.09);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.antiwaste-banner button:hover {
+  box-shadow:
+    0 8px 20px
+      rgba(0, 0, 0, 0.13);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   CARGANDO / ERROR
+========================================================= */
+
+.dashboard-state {
+  min-height: 330px;
+
+  padding: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  border:
+    1px dashed #d4dfd7;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.78);
+
+  text-align: center;
+}
+
+.dashboard-state > span {
+  width: 52px;
+  height: 52px;
+
+  margin-bottom: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background: #eef7f0;
+
+  font-size: 22px;
+}
+
+.dashboard-state h3 {
+  margin: 0 0 6px;
+
+  color: #314139;
+
+  font-size: 15px;
+}
+
+.dashboard-state p {
+  margin: 0;
+
+  color: #849188;
+
+  font-size: 11px;
+}
+
+.dashboard-error {
+  border-color: #efcecb;
+
+  background: #fffafa;
+}
+
+.dashboard-error > span {
+  background: #fff0ef;
+  color: #c5453b;
+}
+
+.dashboard-error h3 {
+  color: #bd4138;
+}
+
+
+/* =========================================================
+   RESPONSIVE - NOTEBOOK
+========================================================= */
+
+@media (max-width: 1200px) {
+  .dashboard-summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .traffic-light-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+  .dashboard-heading {
+    padding: 24px;
+
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-primary-button {
+    min-width: 0;
+  }
+
+  .dashboard-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .antiwaste-banner {
+    grid-template-columns:
+      56px
+      minmax(0, 1fr);
+  }
+
+  .antiwaste-banner button {
+    grid-column: 1 / -1;
+
+    justify-self: start;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MÓVIL
+========================================================= */
+
+@media (max-width: 560px) {
+  .dashboard-heading {
+    padding: 21px;
+
+    border-radius: 16px;
+  }
+
+  .dashboard-heading h1 {
+    font-size: 26px;
+  }
+
+  .dashboard-primary-button {
+    width: 100%;
+  }
+
+  .dashboard-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .traffic-light-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-section {
+    padding: 20px;
+
+    border-radius: 15px;
+  }
+
+  .priority-product {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr);
+  }
+
+  .priority-expiration {
+    grid-column: 2;
+
+    align-items: flex-start;
+
+    text-align: left;
+  }
+
+  .antiwaste-banner {
+    padding: 22px;
+
+    grid-template-columns: 1fr;
+  }
+
+  .antiwaste-banner button {
+    width: 100%;
+
+    justify-self: stretch;
+  }
+}

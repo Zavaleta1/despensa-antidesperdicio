@@ -1,0 +1,2790 @@
+/* =========================================================
+   LAYOUT
+   Despensa Antidesperdicio
+========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+  --layout-green-950: #123c2c;
+  --layout-green-900: #174a35;
+  --layout-green-800: #1d5b40;
+  --layout-green-700: #28744d;
+  --layout-green-600: #34885b;
+
+  --layout-green-100: #e9f5ed;
+  --layout-green-50: #f3f9f5;
+
+  --layout-text: #203129;
+  --layout-muted: #7b8b82;
+
+  --layout-border: #e2e9e4;
+  --layout-background: #f5f8f5;
+
+  --sidebar-width: 268px;
+}
+
+
+/* =========================================================
+   LAYOUT GENERAL
+========================================================= */
+
+.app-layout {
+  min-height: 100vh;
+
+  display: flex;
+
+  background:
+    radial-gradient(
+      circle at 78% 5%,
+      rgba(87, 157, 104, 0.08),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      #f7faf7 0%,
+      #f3f7f4 100%
+    );
+
+  color: var(--layout-text);
+}
+
+.app-main {
+  min-width: 0;
+
+  flex: 1;
+
+  margin-left: var(--sidebar-width);
+}
+
+.app-content {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding: 34px 36px 55px;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+  position: fixed;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  z-index: 100;
+
+  width: var(--sidebar-width);
+
+  padding: 25px 17px 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 15% 8%,
+      rgba(118, 190, 135, 0.18),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      #174c36 0%,
+      #123d2c 58%,
+      #0f3426 100%
+    );
+
+  border-right:
+    1px solid rgba(255, 255, 255, 0.05);
+
+  box-shadow:
+    12px 0 35px rgba(25, 58, 40, 0.08);
+}
+
+
+/* =========================================================
+   MARCA DEL SIDEBAR
+========================================================= */
+
+.sidebar-brand {
+  padding: 2px 9px 31px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.sidebar-logo {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+
+  color: #87d79e;
+}
+
+.sidebar-logo svg {
+  width: 32px;
+  height: 32px;
+}
+
+.sidebar-brand-text {
+  min-width: 0;
+}
+
+.sidebar-brand h1 {
+  margin: 0 0 2px;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 750;
+  line-height: 1.05;
+
+  letter-spacing: -0.3px;
+}
+
+.sidebar-brand span {
+  color: rgba(224, 243, 230, 0.65);
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 0.2px;
+}
+
+
+/* =========================================================
+   NAVEGACIÓN DEL SIDEBAR
+========================================================= */
+
+.sidebar-nav {
+  flex: 1;
+}
+
+.sidebar-section-title {
+  margin: 0 12px 11px;
+
+  color: rgba(218, 239, 225, 0.46);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.sidebar-item {
+  position: relative;
+
+  width: 100%;
+  min-height: 48px;
+
+  margin-bottom: 5px;
+  padding: 0 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border: 1px solid transparent;
+  border-radius: 11px;
+
+  background: transparent;
+
+  color: rgba(235, 246, 238, 0.72);
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+
+  text-align: left;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  border-color:
+    rgba(255, 255, 255, 0.04);
+
+  color: #ffffff;
+
+  transform: translateX(2px);
+}
+
+.sidebar-item.active {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(111, 190, 132, 0.22),
+      rgba(255, 255, 255, 0.08)
+    );
+
+  border-color:
+    rgba(153, 218, 170, 0.13);
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  box-shadow:
+    inset 3px 0 0 #77ce8e;
+}
+
+.sidebar-item-icon {
+  width: 23px;
+  height: 23px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.sidebar-item-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.sidebar-item.active .sidebar-item-icon {
+  color: #92dda5;
+}
+
+.sidebar-item-text {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-active-dot {
+  width: 5px;
+  height: 5px;
+
+  margin-left: auto;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #8ddd9f;
+
+  box-shadow:
+    0 0 0 4px rgba(141, 221, 159, 0.1);
+}
+
+
+/* =========================================================
+   TARJETA ECOLÓGICA
+========================================================= */
+
+.sidebar-eco-card {
+  position: relative;
+
+  margin: 18px 4px 17px;
+  padding: 15px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  overflow: hidden;
+
+  border:
+    1px solid rgba(167, 222, 181, 0.13);
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(111, 190, 132, 0.13),
+      rgba(255, 255, 255, 0.05)
+    );
+}
+
+.sidebar-eco-card::after {
+  content: "";
+
+  position: absolute;
+
+  right: -22px;
+  bottom: -28px;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(123, 207, 145, 0.07);
+}
+
+.eco-card-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background:
+    rgba(132, 213, 153, 0.15);
+
+  color: #a0e0b0;
+
+  font-size: 16px;
+}
+
+.sidebar-eco-card strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #eaf7ed;
+
+  font-size: 11px;
+}
+
+.sidebar-eco-card p {
+  margin: 0;
+
+  color:
+    rgba(224, 241, 228, 0.55);
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PARTE INFERIOR DEL SIDEBAR
+========================================================= */
+
+.sidebar-bottom {
+  padding-top: 12px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-item.logout {
+  color: rgba(255, 194, 194, 0.75);
+}
+
+.sidebar-item.logout:hover {
+  background:
+    rgba(224, 79, 79, 0.1);
+
+  border-color:
+    rgba(255, 140, 140, 0.08);
+
+  color: #ffd1d1;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar {
+  position: relative;
+
+  min-height: 102px;
+
+  padding: 19px 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  border-bottom:
+    1px solid rgba(218, 228, 221, 0.85);
+
+  box-shadow:
+    0 3px 20px rgba(39, 72, 49, 0.025);
+
+  backdrop-filter: blur(12px);
+}
+
+.topbar-title {
+  min-width: 0;
+}
+
+.topbar-section-label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #6e9879;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+}
+
+.topbar-title h2 {
+  margin: 0 0 4px;
+
+  color: #213329;
+
+  font-size: 22px;
+  font-weight: 750;
+
+  letter-spacing: -0.35px;
+}
+
+.topbar-title p {
+  margin: 0;
+
+  color: #89968e;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   ACCIONES DEL TOPBAR
+========================================================= */
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+}
+
+.notification-button {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e1e8e3;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #596a60;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 10px rgba(36, 66, 45, 0.04);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.notification-button:hover {
+  border-color: #cbdccf;
+
+  background: #f5faf6;
+
+  transform: translateY(-1px);
+}
+
+.notification-button svg {
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+
+  stroke: currentColor;
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.notification-indicator {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 7px;
+  height: 7px;
+
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+
+  background: #e2695f;
+}
+
+.topbar-divider {
+  width: 1px;
+  height: 34px;
+
+  background: #e7ece8;
+}
+
+
+/* =========================================================
+   USUARIO
+========================================================= */
+
+.topbar-user {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.user-avatar {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border:
+    3px solid rgba(255, 255, 255, 0.8);
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2e7d4e,
+      #4c9b67
+    );
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  box-shadow:
+    0 4px 12px rgba(46, 125, 78, 0.18);
+}
+
+.user-information {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.user-information strong {
+  max-width: 180px;
+
+  overflow: hidden;
+
+  color: #2b3931;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-information span {
+  max-width: 180px;
+
+  overflow: hidden;
+
+  color: #8a978f;
+
+  font-size: 9px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-chevron {
+  width: 15px;
+  height: 15px;
+
+  margin-left: 3px;
+
+  fill: none;
+
+  stroke: #9aa59f;
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   SCROLLBAR SIDEBAR
+========================================================= */
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.12);
+}
+
+
+/* =========================================================
+   NAVEGACIÓN MÓVIL
+   Oculta por defecto
+========================================================= */
+
+.mobile-navigation {
+  display: none;
+}
+
+
+/* =========================================================
+   TABLET
+   Sidebar compacto
+========================================================= */
+
+@media (max-width: 1000px) and (min-width: 701px) {
+  :root {
+    --sidebar-width: 82px;
+  }
+
+  .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .sidebar-brand {
+    justify-content: center;
+
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .sidebar-brand-text,
+  .sidebar-section-title,
+  .sidebar-item-text,
+  .sidebar-active-dot,
+  .sidebar-eco-card {
+    display: none;
+  }
+
+  .sidebar-item {
+    padding-left: 0;
+    padding-right: 0;
+
+    justify-content: center;
+  }
+
+  .sidebar-item:hover {
+    transform: none;
+  }
+
+  .sidebar-item.active {
+    box-shadow:
+      inset 0 0 0 1px
+        rgba(153, 218, 170, 0.12);
+  }
+
+  .sidebar-bottom {
+    padding-top: 14px;
+  }
+
+  .app-content {
+    padding:
+      30px
+      26px
+      50px;
+  }
+
+  .topbar {
+    padding:
+      18px
+      26px;
+  }
+}
+
+
+/* =========================================================
+   CELULAR
+   Sidebar desaparece y aparece navegación inferior
+========================================================= */
+
+@media (max-width: 700px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+
+  /* -------------------------------------------------------
+     SIDEBAR
+  ------------------------------------------------------- */
+
+  .sidebar {
+    display: none;
+  }
+
+
+  /* -------------------------------------------------------
+     CONTENIDO PRINCIPAL
+  ------------------------------------------------------- */
+
+  .app-main {
+    width: 100%;
+    min-width: 0;
+
+    margin-left: 0;
+  }
+
+  .app-content {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+
+    padding:
+      20px
+      15px
+      105px;
+  }
+
+
+  /* -------------------------------------------------------
+     TOPBAR MÓVIL
+  ------------------------------------------------------- */
+
+  .topbar {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 80;
+
+    min-height: 72px;
+
+    padding:
+      12px
+      16px;
+
+    background:
+      rgba(255, 255, 255, 0.94);
+
+    border-bottom:
+      1px solid rgba(218, 228, 221, 0.9);
+
+    box-shadow:
+      0 4px 20px rgba(31, 66, 42, 0.04);
+
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-title p,
+  .topbar-section-label,
+  .user-information,
+  .user-chevron,
+  .topbar-divider {
+    display: none;
+  }
+
+  .topbar-title h2 {
+    margin: 0;
+
+    font-size: 19px;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .notification-button {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px;
+  }
+
+  .notification-button svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .user-avatar {
+    width: 38px;
+    height: 38px;
+
+    border-width: 2px;
+    border-radius: 11px;
+
+    font-size: 11px;
+  }
+
+
+  /* -------------------------------------------------------
+     NAVEGACIÓN INFERIOR
+  ------------------------------------------------------- */
+
+  .mobile-navigation {
+    position: fixed;
+
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+
+    z-index: 200;
+
+    height: 70px;
+
+    padding: 7px;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    align-items: center;
+
+    gap: 3px;
+
+    border:
+      1px solid rgba(215, 226, 218, 0.95);
+
+    border-radius: 20px;
+
+    background:
+      rgba(255, 255, 255, 0.96);
+
+    box-shadow:
+      0 14px 40px rgba(25, 59, 37, 0.18);
+
+    backdrop-filter: blur(16px);
+  }
+
+
+  /* -------------------------------------------------------
+     BOTONES DE NAVEGACIÓN
+  ------------------------------------------------------- */
+
+  .mobile-navigation-item {
+    position: relative;
+
+    min-width: 0;
+    height: 56px;
+
+    padding:
+      5px
+      2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 3px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: transparent;
+    color: #829087;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .mobile-navigation-item:active {
+    transform: scale(0.96);
+  }
+
+  .mobile-navigation-icon {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+  }
+
+  .mobile-navigation-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-navigation-text {
+    width: 100%;
+
+    overflow: hidden;
+
+    font-size: 8px;
+    font-weight: 650;
+
+    line-height: 1.1;
+
+    text-align: center;
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+  }
+
+
+  /* -------------------------------------------------------
+     OPCIÓN ACTIVA
+  ------------------------------------------------------- */
+
+  .mobile-navigation-item.active {
+    background:
+      linear-gradient(
+        145deg,
+        #eef8f1,
+        #e5f3e9
+      );
+
+    color: #267448;
+  }
+
+  .mobile-navigation-item.active
+  .mobile-navigation-icon {
+    color: #247348;
+  }
+
+  .mobile-navigation-item.active
+  .mobile-navigation-text {
+    color: #205f3d;
+
+    font-weight: 800;
+  }
+
+  .mobile-navigation-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 4px;
+
+    width: 18px;
+    height: 3px;
+
+    border-radius: 10px;
+
+    background: #45a064;
+  }
+}
+
+
+/* =========================================================
+   CELULARES PEQUEÑOS
+========================================================= */
+
+@media (max-width: 390px) {
+  .app-content {
+    padding:
+      17px
+      12px
+      100px;
+  }
+
+  .topbar {
+    min-height: 66px;
+
+    padding:
+      11px
+      13px;
+  }
+
+  .topbar-title h2 {
+    font-size: 17px;
+  }
+
+  .notification-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-navigation {
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+
+    height: 66px;
+
+    padding: 5px;
+
+    border-radius: 17px;
+  }
+
+  .mobile-navigation-item {
+    height: 54px;
+
+    border-radius: 12px;
+  }
+
+  .mobile-navigation-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .mobile-navigation-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .mobile-navigation-text {
+    font-size: 7.5px;
+  }
+}
+
+
+/* =========================================================
+   PANTALLAS MUY PEQUEÑAS
+========================================================= */
+
+@media (max-width: 340px) {
+  .app-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .topbar {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .mobile-navigation {
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+
+    gap: 1px;
+  }
+
+  .mobile-navigation-text {
+    font-size: 7px;
+  }
+}
+/* =========================================================
+   MENÚ "MÁS" - NAVEGACIÓN MÓVIL
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   ESTADO BASE
+   En escritorio y tablet permanece completamente oculto
+--------------------------------------------------------- */
+
+.mobile-menu-backdrop,
+.mobile-more-menu {
+  display: none;
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 700px) {
+
+  /* -------------------------------------------------------
+     FONDO OSCURECIDO
+  ------------------------------------------------------- */
+
+  .mobile-menu-backdrop {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 180;
+
+    display: block;
+
+    padding: 0;
+
+    border: none;
+
+    background:
+      rgba(17, 38, 26, 0.38);
+
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    cursor: pointer;
+
+    animation:
+      mobile-backdrop-in
+      0.2s ease;
+  }
+
+
+  /* -------------------------------------------------------
+     PANEL "MÁS"
+  ------------------------------------------------------- */
+
+  .mobile-more-menu {
+    position: fixed;
+
+    right: 12px;
+    bottom: 94px;
+    left: 12px;
+
+    z-index: 190;
+
+    display: block;
+
+    max-height:
+      calc(100dvh - 125px);
+
+    padding:
+      10px
+      16px
+      16px;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    border:
+      1px solid
+      rgba(215, 226, 218, 0.96);
+
+    border-radius: 22px;
+
+    background:
+      rgba(255, 255, 255, 0.98);
+
+    box-shadow:
+      0 22px 60px
+      rgba(20, 52, 31, 0.22);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+      translateY(18px)
+      scale(0.98);
+
+    transform-origin:
+      bottom center;
+
+    pointer-events: none;
+
+    transition:
+      opacity 0.22s ease,
+      visibility 0.22s ease,
+      transform 0.22s ease;
+  }
+
+
+  /* -------------------------------------------------------
+     PANEL ABIERTO
+  ------------------------------------------------------- */
+
+  .mobile-more-menu.open {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    pointer-events: auto;
+  }
+
+
+  /* -------------------------------------------------------
+     PEQUEÑO INDICADOR SUPERIOR
+  ------------------------------------------------------- */
+
+  .mobile-more-handle {
+    width: 38px;
+    height: 4px;
+
+    margin:
+      0 auto
+      14px;
+
+    border-radius: 20px;
+
+    background: #d8e1da;
+  }
+
+
+  /* -------------------------------------------------------
+     ENCABEZADO
+  ------------------------------------------------------- */
+
+  .mobile-more-header {
+    min-width: 0;
+
+    padding:
+      0
+      2px
+      14px;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+  }
+
+
+  .mobile-more-eyebrow {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #6f9b7b;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+  }
+
+
+  .mobile-more-header h3 {
+    margin: 0;
+
+    color: #203129;
+
+    font-size: 19px;
+    font-weight: 750;
+
+    letter-spacing: -0.3px;
+  }
+
+
+  /* -------------------------------------------------------
+     BOTÓN CERRAR
+  ------------------------------------------------------- */
+
+  .mobile-more-close {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border:
+      1px solid #e2e9e4;
+
+    border-radius: 10px;
+
+    background: #f8faf8;
+
+    color: #708078;
+
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 23px;
+    font-weight: 300;
+    line-height: 1;
+
+    -webkit-tap-highlight-color:
+      transparent;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+
+  .mobile-more-close:active {
+    transform: scale(0.94);
+  }
+
+
+  /* -------------------------------------------------------
+     CONTENEDOR DE OPCIONES
+  ------------------------------------------------------- */
+
+  .mobile-more-options {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+
+  /* -------------------------------------------------------
+     OPCIONES
+  ------------------------------------------------------- */
+
+  .mobile-more-item {
+    position: relative;
+
+    width: 100%;
+    min-height: 66px;
+
+    padding:
+      10px
+      12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    box-sizing: border-box;
+
+    border:
+      1px solid transparent;
+
+    border-radius: 14px;
+
+    background: transparent;
+
+    color: #56675d;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    text-align: left;
+
+    -webkit-tap-highlight-color:
+      transparent;
+
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+
+  .mobile-more-item:active {
+    transform: scale(0.985);
+  }
+
+
+  /* -------------------------------------------------------
+     ICONO
+  ------------------------------------------------------- */
+
+  .mobile-more-item-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f0f6f2;
+
+    color: #427a55;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+
+  .mobile-more-item-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+
+  /* -------------------------------------------------------
+     TEXTO
+  ------------------------------------------------------- */
+
+  .mobile-more-item-content {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+
+  .mobile-more-item-content strong {
+    overflow: hidden;
+
+    color: #34453b;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+  .mobile-more-item-content small {
+    overflow: hidden;
+
+    color: #8a978f;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+  /* -------------------------------------------------------
+     FLECHA
+  ------------------------------------------------------- */
+
+  .mobile-more-arrow {
+    flex-shrink: 0;
+
+    color: #a4aea8;
+
+    font-size: 24px;
+    font-weight: 300;
+
+    line-height: 1;
+  }
+
+
+  /* -------------------------------------------------------
+     OPCIÓN ACTIVA
+  ------------------------------------------------------- */
+
+  .mobile-more-item.active {
+    border-color:
+      #d8eadc;
+
+    background:
+      linear-gradient(
+        145deg,
+        #f0f8f2,
+        #eaf5ed
+      );
+
+    color: #276f45;
+  }
+
+
+  .mobile-more-item.active
+  .mobile-more-item-icon {
+    background: #dcefe1;
+
+    color: #277247;
+  }
+
+
+  .mobile-more-item.active
+  .mobile-more-item-content strong {
+    color: #256941;
+  }
+
+
+  /* -------------------------------------------------------
+     DIVISOR
+  ------------------------------------------------------- */
+
+  .mobile-more-divider {
+    height: 1px;
+
+    margin:
+      10px
+      5px;
+
+    background: #e8ede9;
+  }
+
+
+  /* -------------------------------------------------------
+     CERRAR SESIÓN
+  ------------------------------------------------------- */
+
+  .mobile-more-item.mobile-logout {
+    border-color:
+      rgba(220, 87, 87, 0.08);
+
+    background:
+      rgba(218, 74, 74, 0.035);
+
+    color: #bd4e4e;
+  }
+
+
+  .mobile-more-item.mobile-logout
+  .mobile-more-item-icon {
+    background: #fff0f0;
+
+    color: #c95555;
+  }
+
+
+  .mobile-more-item.mobile-logout
+  .mobile-more-item-content strong {
+    color: #b84545;
+  }
+
+
+  .mobile-more-item.mobile-logout
+  .mobile-more-item-content small {
+    color: #b98282;
+  }
+
+
+  /* -------------------------------------------------------
+     ASEGURAR QUE LA NAVEGACIÓN ESTÉ
+     ENCIMA DEL FONDO OSCURECIDO
+  ------------------------------------------------------- */
+
+  .mobile-navigation {
+    z-index: 200;
+  }
+}
+
+
+/* =========================================================
+   CELULARES PEQUEÑOS
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .mobile-more-menu {
+    right: 8px;
+    bottom: 86px;
+    left: 8px;
+
+    padding:
+      9px
+      13px
+      13px;
+
+    border-radius: 19px;
+  }
+
+
+  .mobile-more-header {
+    padding-bottom: 11px;
+  }
+
+
+  .mobile-more-header h3 {
+    font-size: 18px;
+  }
+
+
+  .mobile-more-item {
+    min-height: 61px;
+
+    padding:
+      8px
+      9px;
+
+    gap: 10px;
+
+    border-radius: 12px;
+  }
+
+
+  .mobile-more-item-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+  }
+
+
+  .mobile-more-item-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+
+  .mobile-more-item-content strong {
+    font-size: 11px;
+  }
+
+
+  .mobile-more-item-content small {
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================================
+   PANTALLAS MUY PEQUEÑAS
+========================================================= */
+
+@media (max-width: 340px) {
+
+  .mobile-more-menu {
+    right: 6px;
+    left: 6px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+
+  .mobile-more-item {
+    gap: 8px;
+  }
+
+
+  .mobile-more-item-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* =========================================================
+   ANIMACIÓN DEL FONDO
+========================================================= */
+
+@keyframes mobile-backdrop-in {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   REDUCIR ANIMACIONES
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .mobile-more-menu,
+  .mobile-more-item,
+  .mobile-more-close {
+    transition: none;
+  }
+
+  .mobile-menu-backdrop {
+    animation: none;
+  }
+}
+/* =========================================================
+   TOPBAR - MENÚS DESPLEGABLES
+   NOTIFICACIONES Y PERFIL
+========================================================= */
+
+.topbar-dropdown-wrapper {
+  position: relative;
+}
+
+
+/* =========================================================
+   BOTÓN DE NOTIFICACIONES
+========================================================= */
+
+.notification-button {
+  position: relative;
+}
+
+.notification-button.active {
+  border-color: #cfe2d3;
+
+  background: #edf6ef;
+  color: #276d42;
+}
+
+
+/* ---------------------------------------------------------
+   CONTADOR DE NOTIFICACIONES
+--------------------------------------------------------- */
+
+.notification-count {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+
+  background: #d84b4b;
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   PANEL DE NOTIFICACIONES
+========================================================= */
+
+.notification-panel {
+  position: absolute;
+
+  top: calc(100% + 14px);
+  right: 0;
+
+  z-index: 500;
+
+  width: 390px;
+  max-height: 520px;
+
+  overflow: hidden;
+
+  border: 1px solid #dde7df;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+    0 22px 55px rgba(25, 52, 34, 0.16),
+    0 5px 15px rgba(25, 52, 34, 0.06);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(-8px) scale(0.98);
+
+  transform-origin: top right;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    transform 0.2s ease;
+}
+
+.notification-panel.open {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0) scale(1);
+
+  pointer-events: auto;
+}
+
+
+/* ---------------------------------------------------------
+   ENCABEZADO
+--------------------------------------------------------- */
+
+.notification-panel-header {
+  min-height: 75px;
+
+  padding: 17px 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #edf1ee;
+}
+
+.notification-panel-header > div {
+  min-width: 0;
+}
+
+.notification-panel-label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #6e9a78;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+}
+
+.notification-panel-header h3 {
+  margin: 0;
+
+  color: #26372d;
+
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.notification-summary {
+  flex-shrink: 0;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #edf6ef;
+  color: #36764a;
+
+  font-size: 9px;
+  font-weight: 750;
+}
+
+
+/* ---------------------------------------------------------
+   CONTENIDO
+--------------------------------------------------------- */
+
+.notification-panel-content {
+  max-height: 355px;
+
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+}
+
+
+/* ---------------------------------------------------------
+   NOTIFICACIÓN INDIVIDUAL
+--------------------------------------------------------- */
+
+.notification-item {
+  position: relative;
+
+  width: 100%;
+
+  padding: 15px 17px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-bottom: 1px solid #f0f3f1;
+
+  background: #ffffff;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  text-align: left;
+
+  transition:
+    background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: #f8faf8;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item.unread {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(232, 245, 233, 0.75),
+      #ffffff 75%
+    );
+}
+
+.notification-item.unread:hover {
+  background: #f1f8f2;
+}
+
+
+/* ---------------------------------------------------------
+   SEMÁFORO
+--------------------------------------------------------- */
+
+.notification-level {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f5f7f5;
+
+  font-size: 13px;
+}
+
+
+/* ---------------------------------------------------------
+   TEXTO DE NOTIFICACIÓN
+--------------------------------------------------------- */
+
+.notification-item-content {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.notification-item-content strong {
+  overflow: hidden;
+
+  color: #34453b;
+
+  font-size: 11px;
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notification-item-content > span {
+  color: #77857d;
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.notification-item-content small {
+  margin-top: 2px;
+
+  color: #a0aaa4;
+
+  font-size: 8px;
+}
+
+
+/* ---------------------------------------------------------
+   INDICADOR NO LEÍDO
+--------------------------------------------------------- */
+
+.notification-unread-dot {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  margin-top: 5px;
+
+  border-radius: 50%;
+
+  background: #3f8d55;
+
+  box-shadow:
+    0 0 0 3px rgba(63, 141, 85, 0.1);
+}
+
+
+/* =========================================================
+   SIN NOTIFICACIONES
+========================================================= */
+
+.notification-empty {
+  min-height: 225px;
+
+  padding: 30px 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+.notification-empty-icon {
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background: #edf6ef;
+  color: #438056;
+}
+
+.notification-empty-icon svg {
+  width: 21px;
+  height: 21px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.notification-empty strong {
+  margin-bottom: 5px;
+
+  color: #35463c;
+
+  font-size: 12px;
+}
+
+.notification-empty p {
+  max-width: 220px;
+
+  margin: 0;
+
+  color: #8b9890;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+
+/* ---------------------------------------------------------
+   PIE DE NOTIFICACIONES
+--------------------------------------------------------- */
+
+.notification-panel-footer {
+  min-height: 43px;
+
+  padding: 11px 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-top: 1px solid #edf1ee;
+
+  background: #fafcfa;
+
+  text-align: center;
+}
+
+.notification-panel-footer span {
+  color: #8b9890;
+
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   PERFIL - BOTÓN DEL USUARIO
+========================================================= */
+
+button.topbar-user {
+  padding: 5px 7px;
+
+  border: 1px solid transparent;
+  border-radius: 13px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+button.topbar-user:hover,
+button.topbar-user.active {
+  border-color: #e0e9e2;
+
+  background: #f6f9f6;
+}
+
+.user-chevron {
+  transition:
+    transform 0.2s ease;
+}
+
+.user-chevron.open {
+  transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   MENÚ DEL PERFIL
+========================================================= */
+
+.profile-menu {
+  position: absolute;
+
+  top: calc(100% + 13px);
+  right: 0;
+
+  z-index: 500;
+
+  width: 285px;
+
+  overflow: hidden;
+
+  border: 1px solid #dde7df;
+  border-radius: 17px;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+    0 20px 50px rgba(25, 52, 34, 0.16),
+    0 5px 14px rgba(25, 52, 34, 0.05);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(-8px) scale(0.98);
+
+  transform-origin: top right;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    transform 0.2s ease;
+}
+
+.profile-menu.open {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0) scale(1);
+
+  pointer-events: auto;
+}
+
+
+/* ---------------------------------------------------------
+   CABECERA PERFIL
+--------------------------------------------------------- */
+
+.profile-menu-header {
+  padding: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.profile-menu-avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #2e7d4c,
+      #24653d
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 16px rgba(46, 125, 76, 0.18);
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.profile-menu-header > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.profile-menu-header strong {
+  overflow: hidden;
+
+  color: #304139;
+
+  font-size: 11px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-menu-header span {
+  overflow: hidden;
+
+  color: #87938c;
+
+  font-size: 9px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+   DIVISOR
+--------------------------------------------------------- */
+
+.profile-menu-divider {
+  height: 1px;
+
+  margin: 0 12px;
+
+  background: #edf1ee;
+}
+
+
+/* ---------------------------------------------------------
+   OPCIONES PERFIL
+--------------------------------------------------------- */
+
+.profile-menu-item {
+  width: 100%;
+  min-height: 57px;
+
+  padding: 9px 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  background: transparent;
+
+  color: #53635a;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.profile-menu-item:hover {
+  background: #f6f9f6;
+}
+
+.profile-menu-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff5f0;
+  color: #4d7e5c;
+}
+
+.profile-menu-icon svg {
+  width: 17px;
+  height: 17px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.profile-menu-item > span:nth-child(2) {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.profile-menu-item strong {
+  color: #3d4d44;
+
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.profile-menu-item small {
+  color: #929d96;
+
+  font-size: 8px;
+}
+
+.profile-menu-arrow {
+  flex-shrink: 0;
+
+  color: #a9b2ac;
+
+  font-size: 20px;
+  font-weight: 300;
+}
+
+
+/* =========================================================
+   CERRAR SESIÓN
+========================================================= */
+
+.profile-menu-item.logout {
+  color: #bb4e4e;
+}
+
+.profile-menu-item.logout:hover {
+  background: #fff7f7;
+}
+
+.profile-menu-item.logout
+.profile-menu-icon {
+  background: #fff0f0;
+  color: #c45252;
+}
+
+.profile-menu-item.logout strong {
+  color: #b74747;
+}
+
+.profile-menu-item.logout small {
+  color: #b98383;
+}
+
+
+/* =========================================================
+   SCROLLBAR DE NOTIFICACIONES
+========================================================= */
+
+.notification-panel-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.notification-panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-panel-content::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+
+  background: #d8e2da;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  /* -------------------------------------------------------
+     TOPBAR
+  ------------------------------------------------------- */
+
+  .topbar-dropdown-wrapper {
+    position: static;
+  }
+
+
+  /* -------------------------------------------------------
+     NOTIFICACIONES
+  ------------------------------------------------------- */
+
+  .notification-panel {
+    position: fixed;
+
+    top: 78px;
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+
+    max-height:
+      calc(100dvh - 170px);
+
+    transform:
+      translateY(-7px)
+      scale(0.99);
+  }
+
+  .notification-panel.open {
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+  .notification-panel-content {
+    max-height:
+      calc(100dvh - 295px);
+  }
+
+
+  /* -------------------------------------------------------
+     PERFIL
+  ------------------------------------------------------- */
+
+  .profile-menu {
+    position: fixed;
+
+    top: 78px;
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+
+    transform:
+      translateY(-7px)
+      scale(0.99);
+  }
+
+  .profile-menu.open {
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+
+  /* -------------------------------------------------------
+     INFORMACIÓN DEL USUARIO
+     En celular usamos principalmente el avatar.
+  ------------------------------------------------------- */
+
+  button.topbar-user {
+    padding: 4px;
+  }
+
+  button.topbar-user
+  .user-chevron {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   CELULARES PEQUEÑOS
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .notification-panel,
+  .profile-menu {
+    right: 8px;
+    left: 8px;
+
+    border-radius: 15px;
+  }
+
+  .notification-panel-header {
+    padding:
+      14px
+      15px;
+  }
+
+  .notification-item {
+    padding:
+      13px
+      14px;
+  }
+
+  .profile-menu-header {
+    padding:
+      14px;
+  }
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+.notification-button:focus-visible,
+button.topbar-user:focus-visible,
+.notification-item:focus-visible,
+.profile-menu-item:focus-visible {
+  outline:
+    3px solid
+    rgba(46, 125, 80, 0.18);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCIR ANIMACIONES
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .notification-panel,
+  .profile-menu,
+  .user-chevron,
+  button.topbar-user,
+  .notification-item,
+  .profile-menu-item {
+    transition: none;
+  }
+}
+/* =========================================================
+   CORRECCIÓN DE CAPAS
+   TOPBAR / NOTIFICACIONES / PERFIL
+========================================================= */
+
+/*
+  El topbar completo debe estar por encima
+  del contenido principal.
+*/
+
+.topbar {
+  position: relative;
+  z-index: 1000;
+
+  overflow: visible;
+}
+
+
+/*
+  Las acciones del topbar también deben
+  permitir que los desplegables salgan
+  de sus límites.
+*/
+
+.topbar-actions {
+  position: relative;
+  z-index: 1010;
+
+  overflow: visible;
+}
+
+
+/*
+  Contenedor individual de cada dropdown.
+*/
+
+.topbar-dropdown-wrapper {
+  position: relative;
+  z-index: 1020;
+
+  overflow: visible;
+}
+
+
+/*
+  Panel de notificaciones.
+*/
+
+.notification-panel {
+  z-index: 1100;
+}
+
+
+/*
+  Menú del perfil.
+*/
+
+.profile-menu {
+  z-index: 1100;
+}
+
+
+/*
+  El contenido normal de la aplicación
+  permanece debajo del topbar.
+*/
+
+.app-content {
+  position: relative;
+  z-index: 1;
+}
+
+
+/*
+  Evitamos que el contenedor principal
+  genere una capa superior accidental.
+*/
+
+.app-main {
+  position: relative;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .topbar {
+    z-index: 1000;
+  }
+
+  .notification-panel,
+  .profile-menu {
+    z-index: 1200;
+  }
+
+  /*
+    La navegación inferior debe continuar
+    accesible, pero por debajo de los
+    desplegables del topbar.
+  */
+
+  .mobile-navigation {
+    z-index: 900;
+  }
+
+  /*
+    El menú "Más" debe quedar sobre
+    el contenido, pero debajo de los
+    dropdowns del topbar si coincidieran.
+  */
+
+  .mobile-menu-backdrop {
+    z-index: 850;
+  }
+
+  .mobile-more-menu {
+    z-index: 950;
+  }
+}
