@@ -620,11 +620,20 @@ app.delete(
 
 
 // ==========================================
-// INICIAR SERVIDOR
+// INICIAR SERVIDOR LOCAL
 // ==========================================
 
-app.listen(PORT, () => {
-  console.log(
-    `Servidor ejecutándose en http://localhost:${PORT}`
-  );
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(
+      `Servidor ejecutándose en http://localhost:${PORT}`
+    );
+  });
+}
+
+
+// ==========================================
+// EXPORTAR APP PARA VERCEL
+// ==========================================
+
+module.exports = app;
