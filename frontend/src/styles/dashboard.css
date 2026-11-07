@@ -1320,3 +1320,145 @@ span:not(.traffic-circle) {
     justify-self: stretch;
   }
 }
+
+/* ==========================================
+   BOTÓN VER EN MI DESPENSA
+========================================== */
+
+.priority-view-button {
+  margin-top: 10px;
+  padding: 7px 12px;
+  border: 1px solid #16a34a;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.priority-view-button:hover {
+  background: #f0fdf4;
+}
+
+.priority-view-button:focus-visible {
+  outline: 3px solid #86efac;
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   PASO 82 - SELECCIÓN DE INGREDIENTES
+========================================== */
+
+.priority-ingredient-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803d;
+  cursor: pointer;
+}
+
+.priority-ingredient-select input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #16a34a;
+  cursor: pointer;
+}
+
+/* ==========================================
+   PANEL DE BÚSQUEDA DE RECETAS
+========================================== */
+
+.priority-recipes-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  background: #f0fdf4;
+}
+
+.priority-recipes-panel h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.priority-recipes-panel p {
+  max-width: 540px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.priority-recipes-count {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.priority-recipes-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.priority-recipes-button:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+.priority-recipes-button:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.priority-recipes-button:focus-visible {
+  outline: 3px solid #86efac;
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   ADAPTACIÓN A CELULARES
+========================================== */
+
+@media (max-width: 640px) {
+  .priority-recipes-panel {
+    align-items: stretch;
+    padding: 18px;
+  }
+
+  .priority-recipes-panel h3 {
+    font-size: 16px;
+  }
+
+  .priority-recipes-button {
+    width: 100%;
+  }
+}

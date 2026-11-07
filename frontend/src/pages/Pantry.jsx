@@ -1,9 +1,8 @@
+
 import { useEffect, useState } from "react";
 
 import AppLayout from "../components/layout/AppLayout";
-
 import ProductCard from "../components/ProductCard";
-
 import ProductForm from "../components/ProductForm";
 
 import {
@@ -12,21 +11,18 @@ import {
   crearProducto,
   actualizarProducto,
   eliminarProducto,
+  registrarMovimientoProducto,
 } from "../services/productService";
 
 import "../styles/pantry.css";
 
-
 function Pantry({
   usuario,
   token,
+  fotoPerfilUrl,
   onLogout,
   onCambiarPagina,
-
-  // ==========================================
-  // NOTIFICACIONES
-  // ==========================================
-
+  productoSeleccionadoId = null,
   notificaciones = [],
   cargandoNotificaciones = false,
   onRecargarNotificaciones,
@@ -37,51 +33,67 @@ function Pantry({
   // ESTADOS
   // ==========================================
 
-  const [productos, setProductos] =
-    useState([]);
+  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
 
-  const [categorias, setCategorias] =
-    useState([]);
+  const [mostrarFormulario, setMostrarFormulario] =
+    useState(false);
 
-  const [cargando, setCargando] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [
-    mostrarFormulario,
-    setMostrarFormulario,
-  ] = useState(false);
-
-  const [
-    productoEditando,
-    setProductoEditando,
-  ] = useState(null);
-
+  const [productoEditando, setProductoEditando] =
+    useState(null);
 
   // ==========================================
   // FILTROS
   // ==========================================
 
-  const [busqueda, setBusqueda] =
+  const [busqueda, setBusqueda] = useState("");
+  const [categoriaFiltro, setCategoriaFiltro] =
+    useState("");
+  const [ubicacionFiltro, setUbicacionFiltro] =
+    useState("");
+  const [semaforoFiltro, setSemaforoFiltro] =
     useState("");
 
-  const [
-    categoriaFiltro,
-    setCategoriaFiltro,
-  ] = useState("");
+  // ==========================================
+  // PRODUCTO SELECCIONADO DESDE INICIO
+  // ==========================================
 
-  const [
-    ubicacionFiltro,
-    setUbicacionFiltro,
-  ] = useState("");
+  const [productoEnfocadoId, setProductoEnfocadoId] =
+    useState(productoSeleccionadoId);
 
-  const [
-    semaforoFiltro,
-    setSemaforoFiltro,
-  ] = useState("");
+  useEffect(() => {
+    setProductoEnfocadoId(productoSeleccionadoId);
+  }, [productoSeleccionadoId]);
 
+  useEffect(() => {
+    if (
+      productoEnfocadoId == null ||
+      cargando ||
+      error
+    ) {
+      return;
+    }
+
+    const seleccionado = productos.find(
+      (producto) =>
+        String(producto.id) ===
+        String(productoEnfocadoId)
+    );
+
+    if (seleccionado) {
+      setBusqueda(seleccionado.name || "");
+      setCategoriaFiltro("");
+      setUbicacionFiltro("");
+      setSemaforoFiltro("");
+    }
+  }, [
+    productoEnfocadoId,
+    productos,
+    cargando,
+    error,
+  ]);
 
   // ==========================================
   // CARGAR DATOS
@@ -116,7 +128,7 @@ function Pantry({
 
         setError(
           error.message ||
-            "No se pudo cargar la despensa."
+          "No se pudo cargar la despensa."
         );
       } finally {
         setCargando(false);
@@ -126,36 +138,29 @@ function Pantry({
     cargarDatos();
   }, [token, onLogout]);
 
-
   // ==========================================
   // RECARGAR PRODUCTOS
   // ==========================================
 
   const recargarProductos = async () => {
-    const datos =
-      await obtenerProductos(token);
-
+    const datos = await obtenerProductos(token);
     setProductos(datos);
   };
 
-
   // ==========================================
-  // SINCRONIZAR DESPENSA Y NOTIFICACIONES
+  // SINCRONIZAR PRODUCTOS Y NOTIFICACIONES
   // ==========================================
 
   const sincronizarDespensa = async () => {
-    // Primero actualizamos los productos.
     await recargarProductos();
 
-    // Después actualizamos la campana.
     if (onRecargarNotificaciones) {
       await onRecargarNotificaciones();
     }
   };
 
-
   // ==========================================
-  // FORMULARIO NUEVO
+  // ABRIR FORMULARIO NUEVO
   // ==========================================
 
   const abrirFormularioNuevo = () => {
@@ -168,14 +173,11 @@ function Pantry({
     });
   };
 
-
   // ==========================================
   // EDITAR PRODUCTO
   // ==========================================
 
-  const abrirFormularioEditar = (
-    producto
-  ) => {
+  const abrirFormularioEditar = (producto) => {
     setProductoEditando(producto);
     setMostrarFormulario(true);
 
@@ -184,7 +186,6 @@ function Pantry({
       behavior: "smooth",
     });
   };
-
 
   // ==========================================
   // CERRAR FORMULARIO
@@ -195,19 +196,12 @@ function Pantry({
     setProductoEditando(null);
   };
 
-
   // ==========================================
   // GUARDAR PRODUCTO
   // ==========================================
 
-  const guardarProducto = async (
-    producto
-  ) => {
+  const guardarProducto = async (producto) => {
     try {
-      // ========================================
-      // EDITAR
-      // ========================================
-
       if (productoEditando) {
         await actualizarProducto(
           productoEditando.id,
@@ -216,7 +210,6 @@ function Pantry({
         );
 
         await sincronizarDespensa();
-
         cerrarFormulario();
 
         alert(
@@ -226,18 +219,8 @@ function Pantry({
         return;
       }
 
-
-      // ========================================
-      // CREAR
-      // ========================================
-
-      await crearProducto(
-        producto,
-        token
-      );
-
+      await crearProducto(producto, token);
       await sincronizarDespensa();
-
       cerrarFormulario();
 
       alert(
@@ -256,21 +239,18 @@ function Pantry({
 
       alert(
         "❌ No se pudo guardar el producto: " +
-          error.message
+        error.message
       );
 
       throw error;
     }
   };
 
-
   // ==========================================
   // ELIMINAR PRODUCTO
   // ==========================================
 
-  const manejarEliminarProducto = async (
-    producto
-  ) => {
+  const manejarEliminarProducto = async (producto) => {
     const confirmar = window.confirm(
       `¿Seguro que deseas eliminar "${producto.name}"?`
     );
@@ -280,24 +260,11 @@ function Pantry({
     }
 
     try {
-      await eliminarProducto(
-        producto.id,
-        token
-      );
-
-      // ========================================
-      // ACTUALIZAR PRODUCTOS Y NOTIFICACIONES
-      // ========================================
-
+      await eliminarProducto(producto.id, token);
       await sincronizarDespensa();
 
-      // Si el producto eliminado estaba
-      // abierto en el formulario de edición,
-      // cerramos el formulario.
-
       if (
-        productoEditando?.id ===
-        producto.id
+        productoEditando?.id === producto.id
       ) {
         cerrarFormulario();
       }
@@ -318,11 +285,101 @@ function Pantry({
 
       alert(
         "❌ No se pudo eliminar el producto: " +
-          error.message
+        error.message
       );
     }
   };
 
+  // ==========================================
+  // REGISTRAR CONSUMO O DESPERDICIO
+  // ==========================================
+
+  const manejarMovimiento = async (
+    producto,
+    tipo
+  ) => {
+    const disponible = Number(producto.quantity);
+
+    if (
+      !Number.isFinite(disponible) ||
+      disponible <= 0
+    ) {
+      alert("Este producto está agotado.");
+      return;
+    }
+
+    const accion =
+      tipo === "consumed"
+        ? "consumir"
+        : "desperdiciar";
+
+    const entrada = window.prompt(
+      `¿Qué cantidad deseas ${accion} de "${producto.name}"?\n` +
+      `Disponible: ${disponible} ${producto.unit}`,
+      String(disponible)
+    );
+
+    if (entrada === null) {
+      return;
+    }
+
+    const cantidad = Number(entrada.trim());
+
+    if (
+      !entrada.trim() ||
+      !Number.isFinite(cantidad) ||
+      cantidad <= 0 ||
+      cantidad > disponible
+    ) {
+      alert(
+        "Introduce una cantidad válida que no supere la disponible."
+      );
+      return;
+    }
+
+    const confirmar = window.confirm(
+      `¿Confirmas ${accion} ${cantidad} ${producto.unit} de "${producto.name}"?`
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    try {
+      await registrarMovimientoProducto(
+        producto.id,
+        tipo,
+        cantidad,
+        token
+      );
+
+      await sincronizarDespensa();
+
+      alert(
+        tipo === "consumed"
+          ? "✅ Consumo registrado correctamente"
+          : "✅ Desperdicio registrado correctamente"
+      );
+    } catch (error) {
+      console.error(
+        "Error al registrar movimiento:",
+        error
+      );
+
+      if (error.status === 401) {
+        onLogout();
+        return;
+      }
+
+      alert(
+        "❌ " +
+        (
+          error.message ||
+          "No se pudo registrar el movimiento"
+        )
+      );
+    }
+  };
 
   // ==========================================
   // UBICACIONES DISPONIBLES
@@ -331,73 +388,73 @@ function Pantry({
   const ubicaciones = [
     ...new Set(
       productos
-        .map(
-          (producto) =>
-            producto.location
-        )
+        .map((producto) => producto.location)
         .filter(Boolean)
     ),
   ];
-
 
   // ==========================================
   // ESTADÍSTICAS
   // ==========================================
 
-  const categoriasUtilizadas =
-    new Set(
-      productos.map(
-        (producto) =>
-          producto.category_id
+  const categoriasUtilizadas = new Set(
+    productos.map(
+      (producto) => producto.category_id
+    )
+  ).size;
+
+  const productosUrgentes = productos.filter(
+    (producto) =>
+      producto.expiration_level === "caducado" ||
+      producto.expiration_level === "critico"
+  ).length;
+
+  const productosProximos = productos.filter(
+    (producto) =>
+      producto.expiration_level === "proximo" ||
+      producto.expiration_level === "atencion"
+  ).length;
+
+  // ==========================================
+  // PRIORIDAD DE CADUCIDAD
+  // ==========================================
+
+  const prioridadCaducidad = {
+    caducado: 1,
+    critico: 2,
+    proximo: 3,
+    atencion: 4,
+    vigente: 5,
+    agotado: 6,
+  };
+
+  // ==========================================
+  // FILTRAR Y ORDENAR PRODUCTOS
+  // ==========================================
+
+  const productosFiltrados = productos
+    .filter((producto) => {
+      const coincideSeleccion =
+        productoEnfocadoId == null ||
+        String(producto.id) ===
+          String(productoEnfocadoId);
+
+      const coincideBusqueda = (
+        producto.name || ""
       )
-    ).size;
-
-
-  const productosUrgentes =
-    productos.filter(
-      (producto) =>
-        producto.expiration_level ===
-          "caducado" ||
-        producto.expiration_level ===
-          "critico"
-    ).length;
-
-
-  const productosProximos =
-    productos.filter(
-      (producto) =>
-        producto.expiration_level ===
-          "proximo" ||
-        producto.expiration_level ===
-          "atencion"
-    ).length;
-
-
-  // ==========================================
-  // FILTRAR PRODUCTOS
-  // ==========================================
-
-  const productosFiltrados =
-    productos.filter((producto) => {
-      const coincideBusqueda =
-        producto.name
-          ?.toLowerCase()
-          .includes(
-            busqueda
-              .trim()
-              .toLowerCase()
-          );
+        .toLowerCase()
+        .includes(
+          busqueda.trim().toLowerCase()
+        );
 
       const coincideCategoria =
         !categoriaFiltro ||
-        String(
-          producto.category_id
-        ) === categoriaFiltro;
+        String(producto.category_id) ===
+          categoriaFiltro;
 
       const coincideUbicacion =
         !ubicacionFiltro ||
-        producto.location ===
-          ubicacionFiltro;
+        producto.location === ubicacionFiltro;
 
       const coincideSemaforo =
         !semaforoFiltro ||
@@ -405,33 +462,83 @@ function Pantry({
           semaforoFiltro;
 
       return (
+        coincideSeleccion &&
         coincideBusqueda &&
         coincideCategoria &&
         coincideUbicacion &&
         coincideSemaforo
       );
-    });
+    })
+    .sort((a, b) => {
+      const diferenciaPrioridad =
+        (
+          prioridadCaducidad[
+            a.expiration_level
+          ] ?? 7
+        ) -
+        (
+          prioridadCaducidad[
+            b.expiration_level
+          ] ?? 7
+        );
 
+      if (diferenciaPrioridad !== 0) {
+        return diferenciaPrioridad;
+      }
+
+      const obtenerFecha = (producto) => {
+        if (!producto.expiration_date) {
+          return Infinity;
+        }
+
+        const valor = Date.parse(
+          String(
+            producto.expiration_date
+          ).slice(0, 10)
+        );
+
+        return Number.isFinite(valor)
+          ? valor
+          : Infinity;
+      };
+
+      const fechaA = obtenerFecha(a);
+      const fechaB = obtenerFecha(b);
+
+      if (fechaA !== fechaB) {
+        return fechaA === Infinity
+          ? 1
+          : fechaB === Infinity
+            ? -1
+            : fechaA - fechaB;
+      }
+
+      return (a.name || "").localeCompare(
+        b.name || "",
+        "es",
+        { sensitivity: "base" }
+      );
+    });
 
   // ==========================================
   // LIMPIAR FILTROS
   // ==========================================
 
   const limpiarFiltros = () => {
+    setProductoEnfocadoId(null);
     setBusqueda("");
     setCategoriaFiltro("");
     setUbicacionFiltro("");
     setSemaforoFiltro("");
   };
 
-
   const hayFiltros = Boolean(
+    productoEnfocadoId != null ||
     busqueda ||
-      categoriaFiltro ||
-      ubicacionFiltro ||
-      semaforoFiltro
+    categoriaFiltro ||
+    ubicacionFiltro ||
+    semaforoFiltro
   );
-
 
   // ==========================================
   // INTERFAZ
@@ -440,36 +547,26 @@ function Pantry({
   return (
     <AppLayout
       usuario={usuario}
+      fotoPerfilUrl={fotoPerfilUrl}
       paginaActual="pantry"
       titulo="Mi despensa"
-
-      onCambiarPagina={
-        onCambiarPagina
-      }
-
+      onCambiarPagina={onCambiarPagina}
       onLogout={onLogout}
-
-      notificaciones={
-        notificaciones
-      }
-
+      notificaciones={notificaciones}
       cargandoNotificaciones={
         cargandoNotificaciones
       }
-
       onRecargarNotificaciones={
         onRecargarNotificaciones
       }
-
       onNotificacionLeida={
         onNotificacionLeida
       }
-
       onMarcarTodasLeidas={
         onMarcarTodasLeidas
       }
     >
-      {/* =====================================
+      {/* ======================================
           ENCABEZADO
       ====================================== */}
 
@@ -494,9 +591,7 @@ function Pantry({
         <button
           type="button"
           className="pantry-add-button"
-          onClick={
-            abrirFormularioNuevo
-          }
+          onClick={abrirFormularioNuevo}
         >
           <svg
             viewBox="0 0 24 24"
@@ -506,18 +601,17 @@ function Pantry({
             <path d="M5 12h14" />
           </svg>
 
-          <span>
-            Agregar producto
-          </span>
+          <span>Agregar producto</span>
         </button>
       </section>
 
-
-      {/* =====================================
+      {/* ======================================
           RESUMEN
       ====================================== */}
 
       <section className="pantry-summary">
+        {/* TOTAL DE PRODUCTOS */}
+
         <article className="pantry-summary-card">
           <div className="summary-card-icon total">
             <svg
@@ -531,20 +625,13 @@ function Pantry({
           </div>
 
           <div>
-            <span>
-              Productos
-            </span>
-
-            <strong>
-              {productos.length}
-            </strong>
-
-            <small>
-              registrados
-            </small>
+            <span>Productos</span>
+            <strong>{productos.length}</strong>
+            <small>registrados</small>
           </div>
         </article>
 
+        {/* CATEGORÍAS */}
 
         <article className="pantry-summary-card">
           <div className="summary-card-icon category">
@@ -559,7 +646,6 @@ function Pantry({
                 height="7"
                 rx="1"
               />
-
               <rect
                 x="14"
                 y="3"
@@ -567,7 +653,6 @@ function Pantry({
                 height="7"
                 rx="1"
               />
-
               <rect
                 x="3"
                 y="14"
@@ -575,7 +660,6 @@ function Pantry({
                 height="7"
                 rx="1"
               />
-
               <rect
                 x="14"
                 y="14"
@@ -587,20 +671,15 @@ function Pantry({
           </div>
 
           <div>
-            <span>
-              Categorías
-            </span>
-
+            <span>Categorías</span>
             <strong>
               {categoriasUtilizadas}
             </strong>
-
-            <small>
-              en uso
-            </small>
+            <small>en uso</small>
           </div>
         </article>
 
+        {/* PRIORIDAD ALTA */}
 
         <article
           className={
@@ -614,20 +693,15 @@ function Pantry({
           </div>
 
           <div>
-            <span>
-              Prioridad alta
-            </span>
-
+            <span>Prioridad alta</span>
             <strong>
               {productosUrgentes}
             </strong>
-
-            <small>
-              consumir primero
-            </small>
+            <small>consumir primero</small>
           </div>
         </article>
 
+        {/* POR REVISAR */}
 
         <article className="pantry-summary-card">
           <div className="summary-card-icon upcoming">
@@ -640,20 +714,15 @@ function Pantry({
                 cy="12"
                 r="9"
               />
-
               <path d="M12 7v5l3 2" />
             </svg>
           </div>
 
           <div>
-            <span>
-              Por revisar
-            </span>
-
+            <span>Por revisar</span>
             <strong>
               {productosProximos}
             </strong>
-
             <small>
               próximos / atención
             </small>
@@ -661,8 +730,7 @@ function Pantry({
         </article>
       </section>
 
-
-      {/* =====================================
+      {/* ======================================
           FORMULARIO
       ====================================== */}
 
@@ -674,36 +742,20 @@ function Pantry({
                 ? `editar-${productoEditando.id}`
                 : "nuevo"
             }
-
-            categorias={
-              categorias
-            }
-
-            producto={
-              productoEditando
-            }
-
-            onGuardar={
-              guardarProducto
-            }
-
-            onCancelar={
-              cerrarFormulario
-            }
+            categorias={categorias}
+            producto={productoEditando}
+            onGuardar={guardarProducto}
+            onCancelar={cerrarFormulario}
           />
         </section>
       )}
 
-
-      {/* =====================================
+      {/* ======================================
           INVENTARIO
       ====================================== */}
 
       <section className="inventory-panel">
-
-        {/* ===================================
-            ENCABEZADO DEL INVENTARIO
-        ==================================== */}
+        {/* ENCABEZADO DEL INVENTARIO */}
 
         <div className="inventory-panel-header">
           <div>
@@ -711,9 +763,7 @@ function Pantry({
               TUS ALIMENTOS
             </span>
 
-            <h2>
-              Inventario
-            </h2>
+            <h2>Inventario</h2>
 
             <p>
               Encuentra rápidamente lo que
@@ -734,13 +784,11 @@ function Pantry({
           </div>
         </div>
 
-
-        {/* ===================================
+        {/* ====================================
             FILTROS
         ==================================== */}
 
         <div className="inventory-toolbar">
-
           {/* BUSCADOR */}
 
           <div className="inventory-search">
@@ -753,18 +801,18 @@ function Pantry({
                 cy="11"
                 r="7"
               />
-
               <path d="m20 20-4-4" />
             </svg>
 
             <input
               type="search"
               value={busqueda}
-              onChange={(evento) =>
+              onChange={(evento) => {
+                setProductoEnfocadoId(null);
                 setBusqueda(
                   evento.target.value
-                )
-              }
+                );
+              }}
               placeholder="Buscar producto..."
               aria-label="Buscar producto"
             />
@@ -773,16 +821,13 @@ function Pantry({
               <button
                 type="button"
                 className="search-clear-button"
-                onClick={() =>
-                  setBusqueda("")
-                }
+                onClick={limpiarFiltros}
                 aria-label="Limpiar búsqueda"
               >
                 ×
               </button>
             )}
           </div>
-
 
           {/* CATEGORÍA */}
 
@@ -792,9 +837,7 @@ function Pantry({
             </span>
 
             <select
-              value={
-                categoriaFiltro
-              }
+              value={categoriaFiltro}
               onChange={(evento) =>
                 setCategoriaFiltro(
                   evento.target.value
@@ -809,12 +852,8 @@ function Pantry({
               {categorias.map(
                 (categoria) => (
                   <option
-                    key={
-                      categoria.id
-                    }
-                    value={
-                      categoria.id
-                    }
+                    key={categoria.id}
+                    value={categoria.id}
                   >
                     {categoria.icon
                       ? `${categoria.icon} `
@@ -827,7 +866,6 @@ function Pantry({
             </select>
           </div>
 
-
           {/* UBICACIÓN */}
 
           <div className="filter-control">
@@ -836,9 +874,7 @@ function Pantry({
             </span>
 
             <select
-              value={
-                ubicacionFiltro
-              }
+              value={ubicacionFiltro}
               onChange={(evento) =>
                 setUbicacionFiltro(
                   evento.target.value
@@ -863,7 +899,6 @@ function Pantry({
             </select>
           </div>
 
-
           {/* SEMÁFORO */}
 
           <div className="filter-control">
@@ -872,9 +907,7 @@ function Pantry({
             </span>
 
             <select
-              value={
-                semaforoFiltro
-              }
+              value={semaforoFiltro}
               onChange={(evento) =>
                 setSemaforoFiltro(
                   evento.target.value
@@ -913,8 +946,7 @@ function Pantry({
           </div>
         </div>
 
-
-        {/* ===================================
+        {/* ====================================
             INFORMACIÓN DE RESULTADOS
         ==================================== */}
 
@@ -948,9 +980,7 @@ function Pantry({
             <button
               type="button"
               className="clear-filters-button"
-              onClick={
-                limpiarFiltros
-              }
+              onClick={limpiarFiltros}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -966,8 +996,7 @@ function Pantry({
           )}
         </div>
 
-
-        {/* ===================================
+        {/* ====================================
             CARGANDO
         ==================================== */}
 
@@ -985,8 +1014,7 @@ function Pantry({
           </div>
         )}
 
-
-        {/* ===================================
+        {/* ====================================
             ERROR
         ==================================== */}
 
@@ -1000,14 +1028,11 @@ function Pantry({
               No pudimos cargar la despensa
             </h3>
 
-            <p>
-              {error}
-            </p>
+            <p>{error}</p>
           </div>
         )}
 
-
-        {/* ===================================
+        {/* ====================================
             DESPENSA VACÍA
         ==================================== */}
 
@@ -1039,9 +1064,7 @@ function Pantry({
               <button
                 type="button"
                 className="pantry-add-button"
-                onClick={
-                  abrirFormularioNuevo
-                }
+                onClick={abrirFormularioNuevo}
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -1056,8 +1079,7 @@ function Pantry({
             </div>
           )}
 
-
-        {/* ===================================
+        {/* ====================================
             SIN RESULTADOS
         ==================================== */}
 
@@ -1076,7 +1098,6 @@ function Pantry({
                     cy="11"
                     r="7"
                   />
-
                   <path d="m20 20-4-4" />
                 </svg>
               </div>
@@ -1094,17 +1115,14 @@ function Pantry({
               <button
                 type="button"
                 className="clear-filters-button"
-                onClick={
-                  limpiarFiltros
-                }
+                onClick={limpiarFiltros}
               >
                 Limpiar filtros
               </button>
             </div>
           )}
 
-
-        {/* ===================================
+        {/* ====================================
             PRODUCTOS
         ==================================== */}
 
@@ -1115,20 +1133,25 @@ function Pantry({
               {productosFiltrados.map(
                 (producto) => (
                   <ProductCard
-                    key={
-                      producto.id
-                    }
-
-                    producto={
-                      producto
-                    }
-
+                    key={producto.id}
+                    producto={producto}
                     onEditar={
                       abrirFormularioEditar
                     }
-
                     onEliminar={
                       manejarEliminarProducto
+                    }
+                    onConsumir={(producto) =>
+                      manejarMovimiento(
+                        producto,
+                        "consumed"
+                      )
+                    }
+                    onDesperdiciar={(producto) =>
+                      manejarMovimiento(
+                        producto,
+                        "wasted"
+                      )
                     }
                   />
                 )

@@ -1,0 +1,350 @@
+
+/* ==========================================
+   ENCABEZADO DEL PERFIL
+   ========================================== */
+
+.profile-heading {
+  margin-bottom: 28px;
+}
+
+.profile-eyebrow {
+  display: block;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.profile-heading h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  color: #172b22;
+}
+
+.profile-heading h1 span {
+  color: #16a34a;
+}
+
+.profile-heading p,
+.profile-card-heading p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   CONTENEDOR Y TARJETAS
+   ========================================== */
+
+.profile-content {
+  display: grid;
+  gap: 24px;
+  max-width: 900px;
+}
+
+.profile-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 5px 24px rgba(15, 23, 42, 0.04);
+}
+
+/* ==========================================
+   IDENTIDAD DEL USUARIO
+   ========================================== */
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 26px;
+  font-weight: 800;
+
+  /* Mantener la imagen dentro del círculo */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Fotografía del usuario */
+
+.profile-avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.profile-identity h2 {
+  margin: 0 0 6px;
+  font-size: 23px;
+  color: #172b22;
+}
+
+.profile-identity p {
+  margin: 0;
+  color: #64748b;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   FOTOGRAFÍA DE PERFIL
+   ========================================== */
+
+.profile-photo-section {
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.profile-photo-section h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #172b22;
+}
+
+.profile-photo-note {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Ocultamos el input nativo.
+   El botón personalizado permite seleccionar
+   una imagen desde la computadora. */
+
+.profile-photo-input {
+  display: none;
+}
+
+/* Botones específicos de fotografía */
+
+.profile-photo-section .profile-actions {
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.profile-photo-section .profile-button {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.profile-photo-section
+.profile-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   INFORMACIÓN PERSONAL
+   ========================================== */
+
+.profile-card-heading {
+  margin-bottom: 24px;
+}
+
+.profile-card-heading h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+  color: #172b22;
+}
+
+.profile-card-heading p {
+  margin: 0;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.profile-field label {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.profile-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #172b22;
+  font: inherit;
+  transition: border-color 0.2s;
+}
+
+.profile-field input:focus {
+  outline: none;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.profile-field input:disabled {
+  background: #f8fafc;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.profile-field small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* ==========================================
+   BOTONES
+   ========================================== */
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.profile-button {
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-button.primary {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.profile-button.primary:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.profile-button.secondary {
+  background: #ffffff;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.profile-button.secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.profile-button:focus-visible {
+  outline: 3px solid rgba(22, 163, 74, 0.4);
+  outline-offset: 3px;
+}
+
+.profile-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   MENSAJES
+   ========================================== */
+
+.profile-message {
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.profile-message.error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.profile-message.success {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+/* ==========================================
+   ESTADOS DE CARGA
+   ========================================== */
+
+.profile-state {
+  padding: 36px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+  color: #64748b;
+}
+
+.profile-error {
+  color: #b91c1c;
+}
+
+/* ==========================================
+   DISEÑO RESPONSIVO
+   ========================================== */
+
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-identity {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+  }
+
+  .profile-identity h2 {
+    font-size: 19px;
+  }
+
+  .profile-photo-section {
+    margin-top: 22px;
+    padding-top: 20px;
+  }
+
+  .profile-actions {
+    justify-content: stretch;
+  }
+
+  .profile-button {
+    flex: 1;
+  }
+
+  .profile-photo-section .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-photo-section .profile-button {
+    width: 100%;
+  }
+}

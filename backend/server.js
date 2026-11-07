@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 
 const {
@@ -9,24 +10,29 @@ const cors = require("cors");
 
 const { pool } = require("./config/database");
 
-const authRoutes =
-  require("./routes/auth");
+const authRoutes = require("./routes/auth");
+const productAuditRoutes = require("./routes/productAudit");
+const notificationRoutes = require("./routes/notifications");
 
-const notificationRoutes =
-  require("./routes/notifications");
+const notificationPreferencesRoutes = require(
+  "./routes/notificationPreferences"
+);
 
-const notificationPreferencesRoutes =
-  require("./routes/notificationPreferences");
+const authMiddleware = require(
+  "./middleware/authMiddleware"
+);
 
-const authMiddleware =
-  require("./middleware/authMiddleware");
+const profileRoutes = require(
+  "./routes/profileRoutes"
+);
 
+const productMovementsRoutes = require(
+  "./routes/productMovements"
+);
 
 const app = express();
 
-const PORT =
-  process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 3000;
 
 // ==========================================
 // MIDDLEWARES
@@ -36,26 +42,17 @@ app.use(cors());
 
 app.use(express.json());
 
-
 // ==========================================
 // RUTAS DE AUTENTICACIÓN
 // ==========================================
 
-app.use(
-  "/api/auth",
-  authRoutes
-);
-
+app.use("/api/auth", authRoutes);
 
 // ==========================================
 // RUTAS DE NOTIFICACIONES
 // ==========================================
 
-app.use(
-  "/api/notifications",
-  notificationRoutes
-);
-
+app.use("/api/notifications", notificationRoutes);
 
 // ==========================================
 // RUTAS DE PREFERENCIAS
@@ -66,6 +63,25 @@ app.use(
   notificationPreferencesRoutes
 );
 
+// ==========================================
+// RUTAS DE PERFIL
+// ==========================================
+
+app.use("/api/profile", profileRoutes);
+
+// ==========================================
+// RUTAS DE CONSUMO Y DESPERDICIO
+// ==========================================
+
+app.use(
+  "/api/products",
+  productMovementsRoutes
+);
+// ==========================================
+// HISTORIAL DE AUDITORÍA
+// ==========================================
+
+app.use("/api/products/audit", productAuditRoutes);
 
 // ==========================================
 // RUTA PRINCIPAL
@@ -77,7 +93,6 @@ app.get("/", (req, res) => {
       "API Despensa Antidesperdicio funcionando",
   });
 });
-
 
 // ==========================================
 // OBTENER PRODUCTOS
@@ -103,86 +118,65 @@ app.get(
             p.status,
             p.created_at,
             p.updated_at,
-
             c.name AS category_name,
             c.icon AS category_icon
-
           FROM public."Products" AS p
-
           LEFT JOIN public."Categories" AS c
             ON p.category_id = c.id
-
           WHERE p.user_id = $1
-
           ORDER BY p.expiration_date ASC
         `,
         [req.user.id]
       );
 
       const productosConSemaforo =
-        agregarSemaforoAProductos(
-          result.rows
-        );
+        agregarSemaforoAProductos(result.rows);
 
-      res.json(
-        productosConSemaforo
-      );
-
+      return res.json(productosConSemaforo);
     } catch (error) {
       console.error(
         "❌ Error al obtener productos:",
         error
       );
 
-      res.status(500).json({
-        message:
-          "Error al obtener productos",
-
+      return res.status(500).json({
+        message: "Error al obtener productos",
         error: error.message,
       });
     }
   }
 );
-
 
 // ==========================================
 // OBTENER CATEGORÍAS
 // ==========================================
 
-app.get(
-  "/api/categories",
-  async (req, res) => {
-    try {
-      const result =
-        await pool.query(
-          `
-            SELECT
-              id,
-              name,
-              icon
-            FROM public."Categories"
-            ORDER BY name
-          `
-        );
+app.get("/api/categories", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `
+        SELECT
+          id,
+          name,
+          icon
+        FROM public."Categories"
+        ORDER BY name
+      `
+    );
 
-      res.json(result.rows);
+    return res.json(result.rows);
+  } catch (error) {
+    console.error(
+      "❌ Error al obtener categorías:",
+      error
+    );
 
-    } catch (error) {
-      console.error(
-        "❌ Error al obtener categorías:",
-        error
-      );
-
-      res.status(500).json({
-        message:
-          "Error al obtener categorías",
-
-        error: error.message,
-      });
-    }
+    return res.status(500).json({
+      message: "Error al obtener categorías",
+      error: error.message,
+    });
   }
-);
-
+});
 
 // ==========================================
 // AGREGAR PRODUCTO
@@ -202,11 +196,9 @@ app.post(
         location,
         notes,
         status,
-      } = req.body;
+      } = req.body || {};
 
-      const user_id =
-        req.user.id;
-
+      const user_id = req.user.id;
 
       // ======================================
       // VALIDACIONES
@@ -214,12 +206,14 @@ app.post(
 
       if (!category_id) {
         return res.status(400).json({
-          message:
-            "La categoría es obligatoria",
+          message: "La categoría es obligatoria",
         });
       }
 
-      if (!name || !name.trim()) {
+      if (
+        typeof name !== "string" ||
+        !name.trim()
+      ) {
         return res.status(400).json({
           message:
             "El nombre del producto es obligatorio",
@@ -232,16 +226,16 @@ app.post(
         quantity === ""
       ) {
         return res.status(400).json({
-          message:
-            "La cantidad es obligatoria",
+          message: "La cantidad es obligatoria",
         });
       }
 
+      const cantidad = Number(quantity);
+
       if (
-        Number.isNaN(
-          Number(quantity)
-        ) ||
-        Number(quantity) <= 0
+        typeof quantity === "boolean" ||
+        !Number.isFinite(cantidad) ||
+        cantidad <= 0
       ) {
         return res.status(400).json({
           message:
@@ -249,10 +243,12 @@ app.post(
         });
       }
 
-      if (!unit || !unit.trim()) {
+      if (
+        typeof unit !== "string" ||
+        !unit.trim()
+      ) {
         return res.status(400).json({
-          message:
-            "La unidad es obligatoria",
+          message: "La unidad es obligatoria",
         });
       }
 
@@ -264,360 +260,460 @@ app.post(
       }
 
       if (
-        !location ||
+        typeof location !== "string" ||
         !location.trim()
       ) {
         return res.status(400).json({
-          message:
-            "La ubicación es obligatoria",
+          message: "La ubicación es obligatoria",
         });
       }
-
 
       // ======================================
       // INSERTAR PRODUCTO
       // ======================================
 
-      const result =
-        await pool.query(
-          `
-            INSERT INTO public."Products"
-            (
-              user_id,
-              category_id,
-              name,
-              quantity,
-              unit,
-              expiration_date,
-              location,
-              notes,
-              status,
-              created_at,
-              updated_at
-            )
-            VALUES
-            (
-              $1,
-              $2,
-              $3,
-              $4,
-              $5,
-              $6,
-              $7,
-              $8,
-              $9,
-              NOW(),
-              NOW()
-            )
-
-            RETURNING *
-          `,
-          [
+      const result = await pool.query(
+        `
+          INSERT INTO public."Products"
+          (
             user_id,
             category_id,
-            name.trim(),
-            Number(quantity),
-            unit.trim(),
+            name,
+            quantity,
+            unit,
             expiration_date,
-            location.trim(),
-            notes
-              ? notes.trim()
-              : null,
-            status || "Disponible",
-          ]
-        );
+            location,
+            notes,
+            status,
+            created_at,
+            updated_at
+          )
+          VALUES
+          (
+            $1, $2, $3, $4, $5,
+            $6, $7, $8, $9,
+            NOW(), NOW()
+          )
+          RETURNING *
+        `,
+        [
+          user_id,
+          category_id,
+          name.trim(),
+          cantidad,
+          unit.trim(),
+          expiration_date,
+          location.trim(),
+          typeof notes === "string" && notes.trim()
+            ? notes.trim()
+            : null,
+          status || "Disponible",
+        ]
+      );
 
-      const producto =
-        result.rows[0];
+      const producto = result.rows[0];
 
       console.log(
         "✅ Producto agregado:",
         producto
       );
 
-      res.status(201).json({
+      return res.status(201).json({
         message:
           "Producto agregado correctamente",
-
         producto,
       });
-
     } catch (error) {
       console.error(
         "❌ Error al agregar producto:",
         error
       );
 
-      res.status(500).json({
-        message:
-          "Error al agregar producto",
-
+      return res.status(500).json({
+        message: "Error al agregar producto",
         error: error.message,
       });
     }
   }
 );
 
-
 // ==========================================
 // EDITAR PRODUCTO
+// REGISTRAR EDICIÓN EN AUDITORÍA
 // ==========================================
 
 app.put(
   "/api/products/:id",
   authMiddleware,
   async (req, res) => {
+    const productId = Number(req.params.id);
+    const userId = req.user.id;
+
+    const {
+      category_id,
+      name,
+      quantity,
+      unit,
+      expiration_date,
+      location,
+      notes,
+      status,
+    } = req.body || {};
+
+    // ======================================
+    // VALIDAR ID
+    // ======================================
+
+    if (
+      !Number.isSafeInteger(productId) ||
+      productId <= 0
+    ) {
+      return res.status(400).json({
+        message: "ID de producto inválido",
+      });
+    }
+
+    // ======================================
+    // VALIDAR CAMPOS
+    // ======================================
+
+    if (
+      !category_id ||
+      typeof name !== "string" ||
+      !name.trim() ||
+      quantity === undefined ||
+      quantity === null ||
+      quantity === "" ||
+      typeof unit !== "string" ||
+      !unit.trim() ||
+      !expiration_date ||
+      typeof location !== "string" ||
+      !location.trim()
+    ) {
+      return res.status(400).json({
+        message: "Faltan campos obligatorios",
+      });
+    }
+
+    const cantidad = Number(quantity);
+
+    if (
+      typeof quantity === "boolean" ||
+      !Number.isFinite(cantidad) ||
+      cantidad <= 0
+    ) {
+      return res.status(400).json({
+        message:
+          "La cantidad debe ser mayor que 0",
+      });
+    }
+
+    let client;
+
     try {
-      const productId =
-        Number(req.params.id);
+      // ======================================
+      // INICIAR TRANSACCIÓN
+      // ======================================
 
-      const userId =
-        req.user.id;
+      client = await pool.connect();
 
-      const {
-        category_id,
-        name,
-        quantity,
-        unit,
-        expiration_date,
-        location,
-        notes,
-        status,
-      } = req.body;
-
+      await client.query("BEGIN");
 
       // ======================================
-      // VALIDAR ID
+      // OBTENER DATOS ANTERIORES
       // ======================================
+
+      const consultaAnterior =
+        await client.query(
+          `
+            SELECT *
+            FROM public."Products"
+            WHERE id = $1
+              AND user_id = $2
+            FOR UPDATE
+          `,
+          [productId, userId]
+        );
 
       if (
-        !Number.isInteger(
-          productId
-        ) ||
-        productId <= 0
+        consultaAnterior.rows.length === 0
       ) {
-        return res.status(400).json({
-          message:
-            "ID de producto inválido",
+        await client.query("ROLLBACK");
+
+        return res.status(404).json({
+          message: "Producto no encontrado",
         });
       }
 
-
-      // ======================================
-      // VALIDAR CAMPOS
-      // ======================================
-
-      if (
-        !category_id ||
-        !name ||
-        quantity === undefined ||
-        quantity === null ||
-        !unit ||
-        !expiration_date ||
-        !location
-      ) {
-        return res.status(400).json({
-          message:
-            "Faltan campos obligatorios",
-        });
-      }
-
-      if (
-        Number.isNaN(
-          Number(quantity)
-        ) ||
-        Number(quantity) <= 0
-      ) {
-        return res.status(400).json({
-          message:
-            "La cantidad debe ser mayor que 0",
-        });
-      }
-
+      const productoAnterior =
+        consultaAnterior.rows[0];
 
       // ======================================
       // ACTUALIZAR PRODUCTO
       // ======================================
 
-      const result =
-        await pool.query(
-          `
-            UPDATE public."Products"
+      const resultado = await client.query(
+        `
+          UPDATE public."Products"
+          SET
+            category_id = $1,
+            name = $2,
+            quantity = $3,
+            unit = $4,
+            expiration_date = $5,
+            location = $6,
+            notes = $7,
+            status = $8,
+            updated_at = NOW()
+          WHERE id = $9
+            AND user_id = $10
+          RETURNING *
+        `,
+        [
+          category_id,
+          name.trim(),
+          cantidad,
+          unit.trim(),
+          expiration_date,
+          location.trim(),
+          typeof notes === "string" && notes.trim()
+            ? notes.trim()
+            : null,
+          status || "Disponible",
+          productId,
+          userId,
+        ]
+      );
 
-            SET
-              category_id = $1,
-              name = $2,
-              quantity = $3,
-              unit = $4,
-              expiration_date = $5,
-              location = $6,
-              notes = $7,
-              status = $8,
-              updated_at = NOW()
-
-            WHERE
-              id = $9
-              AND user_id = $10
-
-            RETURNING *
-          `,
-          [
-            category_id,
-            name.trim(),
-            Number(quantity),
-            unit.trim(),
-            expiration_date,
-            location.trim(),
-            notes
-              ? notes.trim()
-              : null,
-            status || "Disponible",
-            productId,
-            userId,
-          ]
-        );
-
+      const productoActualizado =
+        resultado.rows[0];
 
       // ======================================
-      // PRODUCTO NO ENCONTRADO
+      // REGISTRAR AUDITORÍA DE EDICIÓN
       // ======================================
 
-      if (
-        result.rows.length === 0
-      ) {
-        return res.status(404).json({
-          message:
-            "Producto no encontrado",
-        });
-      }
-
+      await client.query(
+        `
+          INSERT INTO public."ProductAuditLog"
+          (
+            user_id,
+            product_id,
+            product_name,
+            action_type,
+            previous_data,
+            new_data
+          )
+          VALUES
+          (
+            $1,
+            $2,
+            $3,
+            'updated',
+            $4::jsonb,
+            $5::jsonb
+          )
+        `,
+        [
+          userId,
+          productId,
+          productoActualizado.name,
+          JSON.stringify(productoAnterior),
+          JSON.stringify(productoActualizado),
+        ]
+      );
 
       // ======================================
-      // RESPUESTA
+      // CONFIRMAR TRANSACCIÓN
       // ======================================
 
-      res.json({
+      await client.query("COMMIT");
+
+      return res.json({
         message:
           "Producto actualizado correctamente",
-
-        producto:
-          result.rows[0],
+        producto: productoActualizado,
       });
-
     } catch (error) {
+      if (client) {
+        try {
+          await client.query("ROLLBACK");
+        } catch (rollbackError) {
+          console.error(
+            "Error al revertir edición:",
+            rollbackError
+          );
+        }
+      }
+
       console.error(
         "❌ Error al editar producto:",
         error
       );
 
-      res.status(500).json({
-        message:
-          "Error al editar producto",
-
-        error: error.message,
+      return res.status(500).json({
+        message: "Error al editar producto",
       });
+    } finally {
+      if (client) {
+        client.release();
+      }
     }
   }
 );
 
-
 // ==========================================
 // ELIMINAR PRODUCTO
+// REGISTRAR ELIMINACIÓN EN AUDITORÍA
 // ==========================================
 
 app.delete(
   "/api/products/:id",
   authMiddleware,
   async (req, res) => {
+    const productId = Number(req.params.id);
+    const userId = req.user.id;
+
+    // ======================================
+    // VALIDAR ID
+    // ======================================
+
+    if (
+      !Number.isSafeInteger(productId) ||
+      productId <= 0
+    ) {
+      return res.status(400).json({
+        message: "ID de producto inválido",
+      });
+    }
+
+    let client;
+
     try {
-      const productId =
-        Number(req.params.id);
+      // ======================================
+      // INICIAR TRANSACCIÓN
+      // ======================================
 
-      const userId =
-        req.user.id;
+      client = await pool.connect();
 
+      await client.query("BEGIN");
 
       // ======================================
-      // VALIDAR ID
+      // OBTENER PRODUCTO ANTERIOR
       // ======================================
+
+      const consultaAnterior =
+        await client.query(
+          `
+            SELECT *
+            FROM public."Products"
+            WHERE id = $1
+              AND user_id = $2
+            FOR UPDATE
+          `,
+          [productId, userId]
+        );
 
       if (
-        !Number.isInteger(
-          productId
-        ) ||
-        productId <= 0
+        consultaAnterior.rows.length === 0
       ) {
-        return res.status(400).json({
-          message:
-            "ID de producto inválido",
+        await client.query("ROLLBACK");
+
+        return res.status(404).json({
+          message: "Producto no encontrado",
         });
       }
 
+      const productoAnterior =
+        consultaAnterior.rows[0];
 
       // ======================================
       // ELIMINAR PRODUCTO
       // ======================================
 
-      const result =
-        await pool.query(
-          `
-            DELETE FROM public."Products"
+      const resultado = await client.query(
+        `
+          DELETE FROM public."Products"
+          WHERE id = $1
+            AND user_id = $2
+          RETURNING *
+        `,
+        [productId, userId]
+      );
 
-            WHERE
-              id = $1
-              AND user_id = $2
-
-            RETURNING *
-          `,
-          [
-            productId,
-            userId,
-          ]
-        );
-
+      const productoEliminado =
+        resultado.rows[0];
 
       // ======================================
-      // PRODUCTO NO ENCONTRADO
+      // REGISTRAR AUDITORÍA DE ELIMINACIÓN
       // ======================================
 
-      if (
-        result.rows.length === 0
-      ) {
-        return res.status(404).json({
-          message:
-            "Producto no encontrado",
-        });
-      }
-
+      await client.query(
+        `
+          INSERT INTO public."ProductAuditLog"
+          (
+            user_id,
+            product_id,
+            product_name,
+            action_type,
+            previous_data,
+            new_data
+          )
+          VALUES
+          (
+            $1,
+            $2,
+            $3,
+            'deleted',
+            $4::jsonb,
+            NULL
+          )
+        `,
+        [
+          userId,
+          productId,
+          productoAnterior.name,
+          JSON.stringify(productoAnterior),
+        ]
+      );
 
       // ======================================
-      // RESPUESTA
+      // CONFIRMAR TRANSACCIÓN
       // ======================================
 
-      res.json({
+      await client.query("COMMIT");
+
+      return res.json({
         message:
           "Producto eliminado correctamente",
-
-        producto:
-          result.rows[0],
+        producto: productoEliminado,
       });
-
     } catch (error) {
+      if (client) {
+        try {
+          await client.query("ROLLBACK");
+        } catch (rollbackError) {
+          console.error(
+            "Error al revertir eliminación:",
+            rollbackError
+          );
+        }
+      }
+
       console.error(
         "❌ Error al eliminar producto:",
         error
       );
 
-      res.status(500).json({
-        message:
-          "Error al eliminar producto",
-
-        error: error.message,
+      return res.status(500).json({
+        message: "Error al eliminar producto",
       });
+    } finally {
+      if (client) {
+        client.release();
+      }
     }
   }
 );
-
 
 // ==========================================
 // INICIAR SERVIDOR LOCAL
@@ -630,7 +726,6 @@ if (require.main === module) {
     );
   });
 }
-
 
 // ==========================================
 // EXPORTAR APP PARA VERCEL

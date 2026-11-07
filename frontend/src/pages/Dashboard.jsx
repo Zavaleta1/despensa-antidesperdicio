@@ -1,3 +1,4 @@
+
 import {
   useEffect,
   useMemo,
@@ -18,16 +19,12 @@ import {
 
 import "../styles/dashboard.css";
 
-
 function Dashboard({
   usuario,
   token,
+  fotoPerfilUrl,
   onLogout,
   onCambiarPagina,
-
-  // ==========================================
-  // NOTIFICACIONES
-  // ==========================================
 
   notificaciones = [],
   cargandoNotificaciones = false,
@@ -43,7 +40,6 @@ function Dashboard({
 
   const [error, setError] =
     useState("");
-
 
   // ==========================================
   // CARGAR PRODUCTOS
@@ -81,7 +77,6 @@ function Dashboard({
 
     cargarProductos();
   }, [token, onLogout]);
-
 
   // ==========================================
   // ESTADÍSTICAS
@@ -130,12 +125,8 @@ function Dashboard({
 
     return {
       total: productos.length,
-
-      categorias:
-        categorias.size,
-
-      ubicaciones:
-        ubicaciones.size,
+      categorias: categorias.size,
+      ubicaciones: ubicaciones.size,
 
       caducados,
       criticos,
@@ -149,61 +140,57 @@ function Dashboard({
     };
   }, [productos]);
 
-
   // ==========================================
   // PRODUCTOS PRIORITARIOS
   // ==========================================
 
-  const productosPrioritarios =
-    useMemo(() => {
-      const prioridad = {
-        caducado: 0,
-        critico: 1,
-        proximo: 2,
-        atencion: 3,
-      };
+  const productosPrioritarios = useMemo(() => {
+    const prioridad = {
+      caducado: 0,
+      critico: 1,
+      proximo: 2,
+      atencion: 3,
+    };
 
-      return productos
-        .filter((producto) =>
-          [
-            "caducado",
-            "critico",
-            "proximo",
-            "atencion",
-          ].includes(
+    return productos
+      .filter((producto) => {
+        const estadosPrioritarios = [
+          "caducado",
+          "critico",
+          "proximo",
+          "atencion",
+        ];
+
+        const tienePrioridad =
+          estadosPrioritarios.includes(
             producto.expiration_level
-          )
-        )
-        .sort((a, b) => {
-          const prioridadA =
-            prioridad[
-              a.expiration_level
-            ];
-
-          const prioridadB =
-            prioridad[
-              b.expiration_level
-            ];
-
-          if (
-            prioridadA !== prioridadB
-          ) {
-            return (
-              prioridadA -
-              prioridadB
-            );
-          }
-
-          return (
-            (a.days_remaining ??
-              99999) -
-            (b.days_remaining ??
-              99999)
           );
-        })
-        .slice(0, 5);
-    }, [productos]);
 
+        const tieneExistencias =
+          Number(producto.quantity) > 0;
+
+        return (
+          tienePrioridad &&
+          tieneExistencias
+        );
+      })
+      .sort((a, b) => {
+        const prioridadA =
+          prioridad[a.expiration_level];
+
+        const prioridadB =
+          prioridad[b.expiration_level];
+
+        if (prioridadA !== prioridadB) {
+          return prioridadA - prioridadB;
+        }
+
+        return (
+          (a.days_remaining ?? 99999) -
+          (b.days_remaining ?? 99999)
+        );
+      });
+  }, [productos]);
 
   // ==========================================
   // NAVEGACIÓN
@@ -213,57 +200,48 @@ function Dashboard({
     onCambiarPagina("pantry");
   };
 
+  const irAProducto = (producto) => {
+    onCambiarPagina("pantry", producto.id);
+  };
+
   const irARecetas = () => {
     onCambiarPagina("recipes");
   };
 
-
   // ==========================================
-  // RENDER
+  // INTERFAZ
   // ==========================================
 
   return (
     <AppLayout
       usuario={usuario}
+      fotoPerfilUrl={fotoPerfilUrl}
       paginaActual="dashboard"
       titulo="Inicio"
 
-      onCambiarPagina={
-        onCambiarPagina
-      }
-
+      onCambiarPagina={onCambiarPagina}
       onLogout={onLogout}
 
-      notificaciones={
-        notificaciones
-      }
-
+      notificaciones={notificaciones}
       cargandoNotificaciones={
         cargandoNotificaciones
       }
-
       onRecargarNotificaciones={
         onRecargarNotificaciones
       }
-
       onNotificacionLeida={
         onNotificacionLeida
       }
-
       onMarcarTodasLeidas={
         onMarcarTodasLeidas
       }
     >
       <DashboardHero
         usuario={usuario}
-        onAgregarProducto={
-          irADespensa
-        }
+        onAgregarProducto={irADespensa}
       />
 
-      {/* =====================================
-          CARGANDO
-      ====================================== */}
+      {/* CARGANDO */}
 
       {cargando && (
         <div className="dashboard-state">
@@ -275,9 +253,7 @@ function Dashboard({
         </div>
       )}
 
-      {/* =====================================
-          ERROR
-      ====================================== */}
+      {/* ERROR */}
 
       {!cargando && error && (
         <div className="dashboard-state dashboard-error">
@@ -291,37 +267,26 @@ function Dashboard({
         </div>
       )}
 
-      {/* =====================================
-          CONTENIDO
-      ====================================== */}
+      {/* CONTENIDO */}
 
       {!cargando && !error && (
         <>
           <PantryOverview
-            estadisticas={
-              estadisticas
-            }
+            estadisticas={estadisticas}
           />
 
           <ExpirationTrafficLight
-            estadisticas={
-              estadisticas
-            }
-            onVerDespensa={
-              irADespensa
-            }
+            estadisticas={estadisticas}
+            onVerDespensa={irADespensa}
           />
 
           <PriorityProducts
-            productos={
-              productosPrioritarios
-            }
+            productos={productosPrioritarios}
+            onVerDespensa={irAProducto}
           />
 
           <AntiWasteBanner
-            onVerRecetas={
-              irARecetas
-            }
+            onVerRecetas={irARecetas}
           />
         </>
       )}

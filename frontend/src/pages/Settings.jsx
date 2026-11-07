@@ -16,6 +16,7 @@ import "../styles/settings.css";
 function Settings({
   usuario,
   token,
+  fotoPerfilUrl,
   onLogout,
   onCambiarPagina,
 
@@ -286,11 +287,11 @@ function Settings({
   // ==========================================
 
   return (
-    <AppLayout
-      usuario={usuario}
-      paginaActual="settings"
-      titulo="Ajustes"
-
+  <AppLayout
+    usuario={usuario}
+    fotoPerfilUrl={fotoPerfilUrl}
+    paginaActual="settings"
+    titulo="Ajustes"
       onCambiarPagina={
         onCambiarPagina
       }

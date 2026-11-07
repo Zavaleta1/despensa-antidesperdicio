@@ -1,6 +1,11 @@
+
 import { useState } from "react";
 import { iniciarSesion } from "../services/authService";
 import "../styles/auth.css";
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:3000";
 
 function Login({ onLogin, onIrARegistro }) {
   const [formulario, setFormulario] = useState({
@@ -9,7 +14,10 @@ function Login({ onLogin, onIrARegistro }) {
   });
 
   const [procesando, setProcesando] = useState(false);
+  const [recuperando, setRecuperando] = useState(false);
   const [error, setError] = useState("");
+  const [mensajeRecuperacion, setMensajeRecuperacion] =
+    useState("");
   const [mostrarPassword, setMostrarPassword] =
     useState(false);
 
@@ -25,9 +33,8 @@ function Login({ onLogin, onIrARegistro }) {
       [name]: value,
     }));
 
-    if (error) {
-      setError("");
-    }
+    setError("");
+    setMensajeRecuperacion("");
   };
 
   // ==========================================
@@ -37,16 +44,16 @@ function Login({ onLogin, onIrARegistro }) {
   const enviarFormulario = async (evento) => {
     evento.preventDefault();
 
-    if (procesando) {
+    if (procesando || recuperando) {
       return;
     }
 
     setProcesando(true);
     setError("");
+    setMensajeRecuperacion("");
 
     try {
       const datos = await iniciarSesion(formulario);
-
       onLogin(datos);
     } catch (error) {
       console.error(
@@ -60,6 +67,74 @@ function Login({ onLogin, onIrARegistro }) {
       );
     } finally {
       setProcesando(false);
+    }
+  };
+
+  // ==========================================
+  // PASO 96.8 - RECUPERAR CONTRASEÑA
+  // ==========================================
+
+  const recuperarPassword = async () => {
+    if (procesando || recuperando) {
+      return;
+    }
+
+    setError("");
+    setMensajeRecuperacion("");
+
+    const email = formulario.email.trim().toLowerCase();
+
+    if (!email) {
+      setError(
+        "Primero introduce tu correo electrónico para recibir el enlace de recuperación."
+      );
+      return;
+    }
+
+    if (
+      email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+      setError(
+        "Introduce un correo electrónico válido."
+      );
+      return;
+    }
+
+    setRecuperando(true);
+
+    try {
+      const respuesta = await fetch(
+        `${API_URL}/api/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      if (!respuesta.ok) {
+        throw new Error(
+          "No se pudo procesar la solicitud. Inténtalo más tarde."
+        );
+      }
+
+      setMensajeRecuperacion(
+        "Si el correo está registrado, recibirás un enlace para recuperar tu contraseña. Revisa tu bandeja de entrada y la carpeta de spam."
+      );
+    } catch (error) {
+      console.error(
+        "Error al solicitar recuperación:",
+        error
+      );
+
+      setError(
+        "No se pudo solicitar la recuperación en este momento. Inténtalo más tarde."
+      );
+    } finally {
+      setRecuperando(false);
     }
   };
 
@@ -252,7 +327,7 @@ function Login({ onLogin, onIrARegistro }) {
                     onChange={cambiarCampo}
                     placeholder="correo@ejemplo.com"
                     autoComplete="email"
-                    disabled={procesando}
+                    disabled={procesando || recuperando}
                     required
                   />
                 </div>
@@ -295,7 +370,7 @@ function Login({ onLogin, onIrARegistro }) {
                     onChange={cambiarCampo}
                     placeholder="Ingresa tu contraseña"
                     autoComplete="current-password"
-                    disabled={procesando}
+                    disabled={procesando || recuperando}
                     required
                   />
 
@@ -346,6 +421,36 @@ function Login({ onLogin, onIrARegistro }) {
                 </div>
               </div>
 
+              {/* PASO 96.8 - RECUPERACIÓN */}
+
+              <div className="auth-forgot-area">
+                <button
+                  type="button"
+                  className="auth-forgot-button"
+                  onClick={recuperarPassword}
+                  disabled={procesando || recuperando}
+                >
+                  {recuperando
+                    ? "Enviando instrucciones..."
+                    : "¿Olvidaste tu contraseña?"}
+                </button>
+              </div>
+
+              {/* MENSAJE DE RECUPERACIÓN */}
+
+              {mensajeRecuperacion && (
+                <div
+                  className="auth-recovery-success"
+                  role="status"
+                >
+                  <span aria-hidden="true">✓</span>
+
+                  <p>
+                    {mensajeRecuperacion}
+                  </p>
+                </div>
+              )}
+
               {/* ERROR */}
 
               {error && (
@@ -359,7 +464,7 @@ function Login({ onLogin, onIrARegistro }) {
 
                   <div>
                     <strong>
-                      No pudimos iniciar sesión
+                      No pudimos completar la solicitud
                     </strong>
 
                     <span>
@@ -374,7 +479,7 @@ function Login({ onLogin, onIrARegistro }) {
               <button
                 className="auth-primary-button"
                 type="submit"
-                disabled={procesando}
+                disabled={procesando || recuperando}
               >
                 {procesando ? (
                   <>
@@ -419,7 +524,7 @@ function Login({ onLogin, onIrARegistro }) {
                 type="button"
                 className="auth-secondary-button"
                 onClick={onIrARegistro}
-                disabled={procesando}
+                disabled={procesando || recuperando}
               >
                 Crear una cuenta
               </button>

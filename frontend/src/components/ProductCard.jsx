@@ -2,6 +2,8 @@ function ProductCard({
   producto,
   onEditar,
   onEliminar,
+  onConsumir,
+  onDesperdiciar,
 }) {
   // ==========================================
   // FORMATEAR FECHA
@@ -280,6 +282,29 @@ function ProductCard({
         </div>
       )}
 
+{/* ======================================
+    CONSUMO Y DESPERDICIO
+====================================== */}
+
+<div className="product-movement-actions">
+  <button
+    type="button"
+    className="movement-button consume-button"
+    disabled={Number(producto.quantity) <= 0}
+    onClick={() => onConsumir(producto)}
+  >
+    🍽️ Consumir
+  </button>
+
+  <button
+    type="button"
+    className="movement-button waste-button"
+    disabled={Number(producto.quantity) <= 0}
+    onClick={() => onDesperdiciar(producto)}
+  >
+    🗑️ Desperdiciar
+  </button>
+</div>
 
       {/* ======================================
           ACCIONES

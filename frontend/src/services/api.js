@@ -1,5 +1,20 @@
+
 export const API_URL =
   import.meta.env.VITE_API_URL || "";
+
+// ==========================================
+// CONTROL DE SESIÓN INVALIDADA
+// ==========================================
+
+let sesionInvalidadaNotificada = false;
+
+export function reiniciarAvisoSesion() {
+  sesionInvalidadaNotificada = false;
+}
+
+// ==========================================
+// PETICIONES HTTP
+// ==========================================
 
 export async function apiRequest(
   endpoint,
@@ -32,6 +47,39 @@ export async function apiRequest(
   } catch {
     data = null;
   }
+
+  // ==========================================
+  // DETECTAR SESIÓN INVALIDADA
+  // ==========================================
+
+  if (response.status === 401 && token) {
+    const tokenActual =
+      localStorage.getItem("token");
+
+    // Solo invalidar si el JWT rechazado
+    // pertenece a la sesión actual.
+    if (tokenActual === token) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("usuario");
+
+      if (!sesionInvalidadaNotificada) {
+        sesionInvalidadaNotificada = true;
+
+        window.dispatchEvent(
+          new CustomEvent("sesion-invalidada", {
+            detail: {
+              message:
+                "Tu sesión ha expirado o fue invalidada. Inicia sesión nuevamente.",
+            },
+          })
+        );
+      }
+    }
+  }
+
+  // ==========================================
+  // MANEJO GENERAL DE ERRORES
+  // ==========================================
 
   if (!response.ok) {
     const error = new Error(

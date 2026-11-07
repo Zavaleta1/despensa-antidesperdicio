@@ -1,13 +1,19 @@
+
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
 import "../../styles/layout.css";
 
-
 function AppLayout({
   usuario,
   paginaActual,
   titulo,
+
+  // ==========================================
+  // FOTOGRAFÍA DE PERFIL
+  // ==========================================
+
+  fotoPerfilUrl,
 
   onCambiarPagina,
   onLogout,
@@ -37,14 +43,11 @@ function AppLayout({
     onCambiarPagina("pantry");
   };
 
-
   return (
     <div className="app-layout">
       <Sidebar
         paginaActual={paginaActual}
-        onCambiarPagina={
-          onCambiarPagina
-        }
+        onCambiarPagina={onCambiarPagina}
         onLogout={onLogout}
       />
 
@@ -53,10 +56,10 @@ function AppLayout({
           usuario={usuario}
           titulo={titulo}
 
-          notificaciones={
-            notificaciones
-          }
+          // Fotografía compartida desde App.jsx
+          fotoPerfilUrl={fotoPerfilUrl}
 
+          notificaciones={notificaciones}
           cargandoNotificaciones={
             cargandoNotificaciones
           }

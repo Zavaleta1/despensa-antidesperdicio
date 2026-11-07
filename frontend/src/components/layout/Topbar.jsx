@@ -7,8 +7,10 @@ import {
 
 
 function Topbar({
+  
   usuario,
   titulo,
+   fotoPerfilUrl,
 
   notificaciones = [],
   cargandoNotificaciones = false,
@@ -571,9 +573,17 @@ function Topbar({
             onClick={alternarPerfil}
             aria-expanded={mostrarPerfil}
           >
-            <div className="user-avatar">
-              {obtenerIniciales()}
-            </div>
+           <div className="user-avatar">
+  {fotoPerfilUrl ? (
+    <img
+      src={fotoPerfilUrl}
+      alt="Fotografía de perfil"
+      className="topbar-avatar-image"
+    />
+  ) : (
+    obtenerIniciales()
+  )}
+</div>
 
             <div className="user-information">
               <strong>
@@ -613,9 +623,17 @@ function Topbar({
             }
           >
             <div className="profile-menu-header">
-              <div className="profile-menu-avatar">
-                {obtenerIniciales()}
-              </div>
+             <div className="profile-menu-avatar">
+  {fotoPerfilUrl ? (
+    <img
+      src={fotoPerfilUrl}
+      alt="Fotografía de perfil"
+      className="topbar-avatar-image"
+    />
+  ) : (
+    obtenerIniciales()
+  )}
+</div>
 
               <div>
                 <strong>
