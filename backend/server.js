@@ -13,6 +13,7 @@ const { pool } = require("./config/database");
 const authRoutes = require("./routes/auth");
 const productAuditRoutes = require("./routes/productAudit");
 const notificationRoutes = require("./routes/notifications");
+const cronRoutes = require("./routes/cronRoutes");
 
 const notificationPreferencesRoutes = require(
   "./routes/notificationPreferences"
@@ -53,6 +54,12 @@ app.use("/api/auth", authRoutes);
 // ==========================================
 
 app.use("/api/notifications", notificationRoutes);
+
+// ==========================================
+// CRON JOBS - CORREOS AUTOMÁTICOS
+// ==========================================
+
+app.use("/api/cron", cronRoutes);
 
 // ==========================================
 // RUTAS DE PREFERENCIAS
