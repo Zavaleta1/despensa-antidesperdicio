@@ -1,3 +1,4 @@
+
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
@@ -29,6 +30,12 @@
       "destination": {
         "service": "frontend"
       }
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/correos-diarios",
+      "schedule": "0 14 * * *"
     }
   ]
 }
