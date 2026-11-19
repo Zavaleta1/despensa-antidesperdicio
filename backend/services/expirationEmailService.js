@@ -791,10 +791,59 @@ async function procesarCorreosUsuario(usuario) {
 // REVISAR TODOS LOS USUARIOS
 // ==========================================
 
+
 async function ejecutarRevisionCorreos() {
   console.log(
     "📧 Iniciando revisión de vencimientos..."
   );
+
+  // ==========================================
+  // MODO DE PRUEBA
+  // ==========================================
+
+  const modoPrueba =
+    process.env.DAILY_EMAIL_TEST_MODE === "YES";
+
+  const idPruebaTexto =
+    process.env.DAILY_EMAIL_TEST_USER_ID;
+
+  let usuarioPruebaId = null;
+
+  if (modoPrueba) {
+    const idValido =
+      typeof idPruebaTexto === "string" &&
+      /^[1-9]\d*$/.test(idPruebaTexto.trim());
+
+    const idNumero = Number(idPruebaTexto);
+
+    if (
+      !idValido ||
+      !Number.isSafeInteger(idNumero)
+    ) {
+      throw new Error(
+        "DAILY_EMAIL_TEST_USER_ID debe ser " +
+        "un identificador positivo válido."
+      );
+    }
+
+    usuarioPruebaId = idNumero;
+
+    console.log(
+      "🧪 MODO DE PRUEBA ACTIVADO"
+    );
+
+    console.log(
+      `🔒 Solo se procesará el usuario ${usuarioPruebaId}`
+    );
+  } else {
+    console.log(
+      "📧 Modo normal: revisión de usuarios habilitados."
+    );
+  }
+
+  // ==========================================
+  // CONSULTAR USUARIOS AUTORIZADOS
+  // ==========================================
 
   const usuariosResult = await pool.query(
     `
@@ -806,8 +855,13 @@ async function ejecutarRevisionCorreos() {
       JOIN public."NotificationPreferences" AS pref
         ON pref.user_id = u.id
       WHERE pref.email_enabled = TRUE
+        AND (
+          $1::boolean = FALSE
+          OR u.id = $2::integer
+        )
       ORDER BY u.id
-    `
+    `,
+    [modoPrueba, usuarioPruebaId]
   );
 
   const resumen = {
@@ -817,8 +871,36 @@ async function ejecutarRevisionCorreos() {
     errores: 0,
   };
 
+  if (
+    modoPrueba &&
+    usuariosResult.rows.length === 0
+  ) {
+    console.log(
+      "🧪 No se encontró un usuario de prueba " +
+      "con los correos habilitados."
+    );
+
+    return resumen;
+  }
+
+  // ==========================================
+  // PROCESAR USUARIOS
+  // ==========================================
+
   for (const usuario of usuariosResult.rows) {
     try {
+      // Defensa adicional:
+      // nunca procesar otro usuario en modo prueba.
+      if (
+        modoPrueba &&
+        usuario.id !== usuarioPruebaId
+      ) {
+        throw new Error(
+          "Se intentó procesar un usuario " +
+          "fuera del modo de prueba."
+        );
+      }
+
       const resultado =
         await procesarCorreosUsuario(usuario);
 
@@ -834,8 +916,7 @@ async function ejecutarRevisionCorreos() {
       resumen.errores++;
 
       console.error(
-        `❌ Error procesando usuario ` +
-        `${usuario.id}:`,
+        `❌ Error procesando usuario ${usuario.id}:`,
         error
       );
     }
@@ -848,15 +929,3 @@ async function ejecutarRevisionCorreos() {
 
   return resumen;
 }
-
-// ==========================================
-// EXPORTACIONES
-// ==========================================
-
-module.exports = {
-  generarAvisosCorreoUsuario,
-  procesarCorreosUsuario,
-  ejecutarRevisionCorreos,
-  obtenerFechaDiaria,
-  obtenerEnvioDiario,
-};
